@@ -2,11 +2,49 @@ import { useState } from 'react';
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import { Canvas } from "./Canvas";
 import useUserContext from '../hooks/useUserContext';
+import axios from 'axios';
 
 import './Main.css';
 
+const fetchAutomaton = async ({ username, automatonName }) => {
+    try {
+        const url = `http://localhost:3001/automatons/automaton/`;
+
+        const { data } = await axios
+            .post(url, { username, automatonName });
+
+        console.log(data);
+
+        if (data) {
+            const { dfa: { nodes }, dfa: { edges } } = data;
+            return { nodes: nodes, edges }
+        }
+        else {
+            return {};
+        }
+
+    } catch (error) {
+        return {};
+    }
+}
+
 export const Main = () => {
-    const { setDfaModalShow, setConfirmModalShow, setErrorsModalShow, saveCanvasPNG } = useUserContext();
+    /* const [userName, setUserName] = useState('');
+    const [automatonName, setAutomatonName] = useState(''); */
+    const {
+        setDfaModalShow,
+        setConfirmModalShow,
+        setErrorsModalShow,
+        setCanvas,
+        userName,
+        setUserName,
+        automatonName,
+        setAutomatonName,
+        saveCanvasPNG
+    } = useUserContext();
+
+    const onChangeUserName = e => setUserName(e.target.value);
+    const onChangeAutomatonName = e => setAutomatonName(e.target.value);
 
     const handleDfaModalOpen = () => {
         setDfaModalShow(true);
@@ -20,6 +58,14 @@ export const Main = () => {
         setErrorsModalShow(true);
     }
 
+    const handleShowCanvas = () => {
+        setCanvas({ graph: {} });
+        const fetchElement = async () => {
+            const res = await fetchAutomaton({ username: userName, automatonName: automatonName });
+            setCanvas({ graph: res })
+        }
+        fetchElement();
+    }
 
     const [process, setProcess] = useState({
         label: "Run",
@@ -93,16 +139,31 @@ export const Main = () => {
             </div>
 
             <div className="d-flex flex-row flex-wrap mb-3">
-                <div className="me-auto">
+                <div>
+                    <Form.Group as={Row} controlId=" ">
+                        <Form.Label column md="auto" className="fw-bold">
+                            Username:
+                        </Form.Label>
+                        <Col md="auto">
+                            <Form.Control type="text" placeholder="Username" onChange={onChangeUserName} value={userName} />
+                        </Col>
+                    </Form.Group>
+                </div>
+                <div className="ms-2">
                     <Form.Group as={Row} controlId=" ">
                         <Form.Label column md="auto" className="fw-bold">
                             Automaton Name:
                         </Form.Label>
                         <Col md="auto">
-                            <Form.Control type="text" placeholder="Automaton Name" readOnly />
+                            <Form.Control type="text" placeholder="Automaton Name" onChange={onChangeAutomatonName} value={automatonName} />
                         </Col>
                     </Form.Group>
                 </div>
+
+                <div className="me-auto">
+                    <Button variant="dark" className="buttons dark-button" onClick={handleShowCanvas}><i className="material-icons">search</i> Search</Button>
+                </div>
+
                 <div>
                     <Button variant="danger" className="buttons" onClick={handleErrorsModalOpen}><i className="material-icons">error</i> Show Errors</Button>
                 </div>

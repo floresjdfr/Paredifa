@@ -2,11 +2,17 @@ import { Modal, Button } from "react-bootstrap";
 import useUserContext from "../../hooks/useUserContext";
 
 export const ConfirmModal = () => {
-    const { confirmModalShow, setConfirmModalShow } = useUserContext();
+    const { confirmModalShow, setConfirmModalShow, setCanvas, setUserName, setAutomatonName } = useUserContext();
 
     const handleClose = () => {
         setConfirmModalShow(false);
     };
+
+    const handleClearCanvas = () => {
+        setCanvas({ graph: {} });
+        setUserName('');
+        setAutomatonName('');
+    }
 
     return (
         <Modal
@@ -25,7 +31,7 @@ export const ConfirmModal = () => {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="danger" onClick={handleClose}>No</Button>
-                <Button variant="success" onClick={handleClose}>Yes</Button>
+                <Button variant="success" onClick={() => {handleClearCanvas(); handleClose();}}>Yes</Button>
             </Modal.Footer>
         </Modal>
     )

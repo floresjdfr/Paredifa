@@ -10,12 +10,16 @@ const UserProvider = ({ ...props }) => {
     const [instructionsModalShow, setInstructionsModalShow] = useState(false);
     const [errorsModalShow, setErrorsModalShow] = useState(false);
 
+    const [canvas, setCanvas] = useState({ graph: {} });
+    const [userName, setUserName] = useState('');
+    const [automatonName, setAutomatonName] = useState('');
+
     // https://www.npmjs.com/package/html2canvas
     const saveCanvasPNG = e => {
         html2canvas(document.querySelector("#canvas")).then(canvas => {
             let img = canvas.toDataURL("image/png");
             let link = document.createElement('a');
-            link.download = 'DFA.png';
+            link.download = automatonName + '.png';
             link.href = img;
             link.click();
         });
@@ -33,6 +37,12 @@ const UserProvider = ({ ...props }) => {
         saveCanvasPNG,
         errorsModalShow,
         setErrorsModalShow,
+        canvas,
+        setCanvas,
+        userName,
+        setUserName,
+        automatonName,
+        setAutomatonName,
     }
 
     return <UserContext.Provider {...props} value={value} />;

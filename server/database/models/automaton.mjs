@@ -10,14 +10,17 @@ const automatonSchema = new Schema(
     dfa: [
       {
         automatonName: String,
-        node: [
+        nodes: [
           {
             id: Number,
             label: String,
+            start: Boolean,
+            final: Boolean,
           },
         ],
         edges: [
           {
+            label: String,
             from: Number,
             to: Number,
           },
