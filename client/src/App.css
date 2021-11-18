@@ -1,0 +1,9 @@
+* {
+    box-sizing: border-box;
+}
+
+/* Fix for Icons */
+.material-icons {
+    display: inline-flex;
+    vertical-align:top;
+}

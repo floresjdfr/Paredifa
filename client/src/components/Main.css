@@ -1,0 +1,17 @@
+.automaton-options {
+    background: #343a40;
+    padding: 1rem;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.buttons {
+    margin: 0 5px;
+    font-weight: bold;
+}
+
+.dark-button {
+    background: #343a40 !important;
+}
