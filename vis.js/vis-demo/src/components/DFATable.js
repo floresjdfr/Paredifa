@@ -1,11 +1,9 @@
 import { useEffect } from 'react';
 import { Button } from "react-bootstrap";
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
-import { axios } from 'axios';
 
 var $ = require('jquery');
 $.DataTable = require('datatables.net');
-
 
 const fetchAutomatons = async ({ username }) => {
     try {
@@ -16,7 +14,7 @@ const fetchAutomatons = async ({ username }) => {
 
         if (data) {
             const { dfa } = data;
-            return { dfa }
+            return { nodes:node, edges }
         }
         else {
             return {};
@@ -27,11 +25,7 @@ const fetchAutomatons = async ({ username }) => {
     }
 }
 
-
-
-
 export const DFATable = () => {
-
     useEffect(() => {
         $('#display').DataTable({
             fixedHeader: true,

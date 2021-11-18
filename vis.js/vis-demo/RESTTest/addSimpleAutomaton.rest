@@ -1,0 +1,40 @@
+POST http://localhost:3001/automatons/add-automaton
+content-type: application/json
+
+{
+   "username":"402390142",
+   "newAutomaton":{
+      "automatonName":"automataSimple",
+      "nodes":[
+         {
+            "id":1,
+            "label":"S0",
+            "final":false,
+            "start":true
+         },
+         {
+            "id":2,
+            "label":"S1",
+            "final":true,
+            "start":false
+         }
+      ],
+      "edges":[
+         {
+            "from":1,
+            "to":2,
+            "label":"0,1"
+         },
+         {
+            "from":2,
+            "to":1,
+            "label":"0"
+         },
+         {
+            "from":2,
+            "to":2,
+            "label":"1"
+         }
+      ]
+   }
+}

@@ -5,7 +5,7 @@ import './Canvas.css';
 
 const options = {
     layout: {
-        hierarchical: false
+      hierarchical: false
     },
     nodes: {
         font: { size: 24 },
@@ -18,13 +18,16 @@ const options = {
         length: 200,
         font: {
             size: 24,
-            align: "bottom",
-            bold: true,
+            align: "bottom"
+        },
+        smooth: {
+            type: "curvedCCW",
         }
     },
     interaction: {
         multiselect: true
-    }
+    },
+    
 };
 
 export const Canvas = () => {

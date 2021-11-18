@@ -4,13 +4,15 @@
   "description": "proyecto programado de paradigmas de programacion 2da parte",
   "main": "index.js",
   "scripts": {
-    "start": "node index.mjs"
+    "start": "node index.mjs",
+    "server": "nodemon index.mjs"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongoose": "^6.0.12"
+    "mongoose": "^6.0.12",
+    "nodemon": "^2.0.15"
   }
 }

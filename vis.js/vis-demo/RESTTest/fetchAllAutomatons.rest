@@ -1,0 +1,16 @@
+POST http://localhost:3001/automatons/automaton
+Content-Type: application/json
+
+{
+    "username":"402390142",
+    "automatonName": "automataSimple"
+}
+
+
+###
+POST http://localhost:3001/automatons/automatons
+Content-Type: application/json
+
+{
+    "username":"402390142"
+}

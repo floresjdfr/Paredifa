@@ -16,8 +16,13 @@ const fetchAutomaton = async ({ username, automatonName }) => {
         console.log(data);
 
         if (data) {
-            const { dfa: { nodes }, dfa: { edges } } = data;
-            return { nodes: nodes, edges }
+            let { dfa: { nodes }, dfa: { edges } } = data;
+            nodes = updateColorForStartAndFinal(nodes)
+            ;
+            
+            console.log('nodes', nodes);
+            //console.log(nodes);
+            return { nodes, edges }
         }
         else {
             return {};
@@ -26,6 +31,24 @@ const fetchAutomaton = async ({ username, automatonName }) => {
     } catch (error) {
         return {};
     }
+}
+
+
+/**
+ * Changes the node's color if they are start or final node
+ * @param {*} nodes => Array
+ * @param {*} startColor => String
+ * @param {*} finalColor => String
+ * @returns new Array with colors added
+ */
+const updateColorForStartAndFinal = (nodes, startColor = '#69995D', finalColor = '#9B2915') => {
+    return nodes.map( node => {
+        return node.start
+        ? {color: startColor, ...node}
+        : node.final
+        ? { color: finalColor , ...node }
+        : { ...node };
+    })
 }
 
 export const Main = () => {
