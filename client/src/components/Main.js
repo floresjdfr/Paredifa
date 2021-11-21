@@ -85,7 +85,7 @@ export const Main = () => {
         setCanvas({ graph: {} });
         const fetchElement = async () => {
             const res = await fetchAutomaton({ username: userName, automatonName: automatonName });
-            setCanvas({ graph: res })
+            setCanvas({ graph: res, counter:0 })
         }
         fetchElement();
     }
