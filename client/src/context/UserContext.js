@@ -10,7 +10,7 @@ const UserProvider = ({ ...props }) => {
     const [instructionsModalShow, setInstructionsModalShow] = useState(false);
     const [errorsModalShow, setErrorsModalShow] = useState(false);
 
-    const [canvas, setCanvas] = useState({ graph: {}, counter: 0, selectedNodes:[], selectedEdges:[]});
+    const [canvas, setCanvas] = useState({ graph: {}, selectedNodes: [], selectedEdges: [] });
     const [userName, setUserName] = useState('');
     const [automatonName, setAutomatonName] = useState('');
 

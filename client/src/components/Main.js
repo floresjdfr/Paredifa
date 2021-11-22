@@ -16,13 +16,12 @@ const fetchAutomaton = async ({ username, automatonName }) => {
         console.log(data);
 
         if (data) {
-            let { dfa: { nodes }, dfa: { edges } } = data;
-            nodes = updateColorForStartAndFinal(nodes)
-            ;
-            
+            let { dfa: { nodes }, dfa: { edges }, dfa: { nodesCounter }, dfa: { edgesCounter } } = data;
+            nodes = updateColorForStartAndFinal(nodes);
+
             console.log('nodes', nodes);
             //console.log(nodes);
-            return { nodes, edges }
+            return { nodes, edges, nodesCounter, edgesCounter }
         }
         else {
             return {};
@@ -42,12 +41,12 @@ const fetchAutomaton = async ({ username, automatonName }) => {
  * @returns new Array with colors added
  */
 const updateColorForStartAndFinal = (nodes, startColor = '#69995D', finalColor = '#9B2915') => {
-    return nodes.map( node => {
+    return nodes.map(node => {
         return node.start
-        ? {color: startColor, ...node}
-        : node.final
-        ? { color: finalColor , ...node }
-        : { ...node };
+            ? { color: startColor, ...node }
+            : node.final
+                ? { color: finalColor, ...node }
+                : { ...node };
     })
 }
 
@@ -85,7 +84,7 @@ export const Main = () => {
         setCanvas({ graph: {} });
         const fetchElement = async () => {
             const res = await fetchAutomaton({ username: userName, automatonName: automatonName });
-            setCanvas({ graph: res, counter:0 })
+            setCanvas({ graph: res, selectedNodes: [], selectedEdges: [] })
         }
         fetchElement();
     }
