@@ -162,8 +162,7 @@ export const Canvas = () => {
         >
             {
                 Object.keys(graph).length > 0 //Checks if graphs has elements
-                    ? <Graph graph={graph} options={options} events={events} />
-                    : <div></div>
+                    && <Graph graph={graph} options={options} events={events} />
             }
         </div>
     )
