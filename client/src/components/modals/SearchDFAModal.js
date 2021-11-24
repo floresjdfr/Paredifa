@@ -11,6 +11,7 @@ export const SearchDFAModal = () => {
 
     return (
         <Modal
+            
             show={dfaModalShow}
             onHide={handleClose}
             size="lg"

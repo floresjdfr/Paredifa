@@ -16,9 +16,10 @@ const data = {
     edges
 };
 
+
 export const Canvas = () => {
-    const { setCanvas } = useUserContext();
-    // const { graph } = canvas;
+
+    const { canvas, setCanvas, setEditTransitionModalShow } = useUserContext();
 
     const domNode = useRef(null);
     const network = useRef(null);
@@ -49,41 +50,49 @@ export const Canvas = () => {
             selectConnectedEdges: false
         },
         manipulation: {
-            addNode: function(data, callback){
+            enabled: false,
+            addNode: function (data, callback) {
                 let id = getNewNodeID(network.current);
                 data.id = id;
-                data.label = `S${id}`;
+                data.label = `s${id}`;
                 callback(data);
+                setCanvas(() =>{
+                    return {
+                        network: network.current,
+                        lastItem: id
+                    }
+                })
+                
             },
-            addEdge: function(data, callback){
+            addEdge: async function (data, callback) {
                 let id = getNewEdgeID(network.current);
                 data.id = id;
-                data.label = `${id}`;
+                //todo
+                // data.label = prompt();
+                // data.label = `${id}`;
                 data.arrows = "to";
                 callback(data);
-            },
-            editNode: function(data, callback){
-                callback(data);
-            },
+                setCanvas(() =>{
+                    return {
+                        network: network.current,
+                        lastItem: id
+                    }
+                })
+                setEditTransitionModalShow(true);
+                
+            }
         }
-
     };
+
     useEffect(() => {
         network.current = new Network(domNode.current, data, options);
         
-        console.log(network.current.getSelectedNodes());
-        network.current.on('doubleClick', createNode);
         network.current.on('oncontext', ({ event }) => {
             event.preventDefault();
         });
-        
         setCanvas({ network: network.current });
+    }, []);
 
-        
-
-    }, [domNode]);
-
-    
 
     const createNode = () => {
         addNode(setCanvas, network.current);
@@ -95,6 +104,7 @@ export const Canvas = () => {
         deleteEdgeAction(setCanvas, network.current);
     }
 
+    
     return (
         <div className="canvas" id="canvas" ref={domNode}
             onKeyPress={(e) => {
@@ -103,9 +113,10 @@ export const Canvas = () => {
                         network.current.enableEditMode();
                         break;
                     case 'KeyA':
-                        if (network.current.inMode === "addNode") network.current.enableEditMode();
-                        
-                        else network.current.addNodeMode();
+                        network.current.addNodeMode();
+                        break;
+                    case 'KeyB':
+                        network.current.addEdgeMode();
                         break;
                     default:
                         break;

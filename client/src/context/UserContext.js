@@ -10,7 +10,11 @@ const UserProvider = ({ ...props }) => {
     const [instructionsModalShow, setInstructionsModalShow] = useState(false);
     const [errorsModalShow, setErrorsModalShow] = useState(false);
 
+    //Canvas related
     const [canvas, setCanvas] = useState({});
+    const[editTransitionModalShow, setEditTransitionModalShow] = useState(false);
+    const[editStateModalShow, setEditStateModalShow] = useState(false);
+
     const [userName, setUserName] = useState('');
     const [automatonName, setAutomatonName] = useState('');
 
@@ -39,6 +43,10 @@ const UserProvider = ({ ...props }) => {
         setErrorsModalShow,
         canvas,
         setCanvas,
+        editTransitionModalShow,
+        setEditTransitionModalShow,
+        editStateModalShow,
+        setEditStateModalShow,
         userName,
         setUserName,
         automatonName,
