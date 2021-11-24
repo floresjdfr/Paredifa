@@ -1,8 +1,8 @@
 import { Modal, Button } from "react-bootstrap";
-import useUserContext from "../../hooks/useUserContext";
+import useGlobalContext from "../../hooks/useGlobalContext";
 
 export const ConfirmModal = () => {
-    const { confirmModalShow, setConfirmModalShow, setCanvas, setUserName, setAutomatonName } = useUserContext();
+    const { confirmModalShow, setConfirmModalShow, setCanvas, setUserName, setAutomatonName } = useGlobalContext();
 
     const handleClose = () => {
         setConfirmModalShow(false);

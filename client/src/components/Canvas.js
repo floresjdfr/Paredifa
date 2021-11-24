@@ -1,5 +1,5 @@
 import Graph from 'react-graph-vis'
-import useUserContext from '../hooks/useUserContext';
+import useGlobalContext from '../hooks/useGlobalContext';
 
 import './Canvas.css';
 
@@ -31,7 +31,7 @@ const options = {
 };
 
 export const Canvas = () => {
-    const { canvas, /* setCanvas */ } = useUserContext();
+    const { canvas, /* setCanvas, */ automatonName } = useGlobalContext();
     const { graph } = canvas;
 
     const events = {
@@ -44,6 +44,7 @@ export const Canvas = () => {
 
     return (
         <div className="canvas" id="canvas">
+            <h2 className="automaton-name ms-2">{automatonName}</h2>
             {
                 Object.keys(graph).length > 0 //Checks if graphs has elements
                     ? <Graph graph={graph} options={options} events={events} />

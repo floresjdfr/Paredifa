@@ -1,8 +1,8 @@
 import { Modal, Button } from "react-bootstrap";
-import useUserContext from "../../hooks/useUserContext";
+import useGlobalContext from "../../hooks/useGlobalContext";
 
 export const InstructionsModal = () => {
-    const { instructionsModalShow, setInstructionsModalShow } = useUserContext();
+    const { instructionsModalShow, setInstructionsModalShow } = useGlobalContext();
 
     const handleClose = () => {
         setInstructionsModalShow(false);

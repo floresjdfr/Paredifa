@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import { Canvas } from "./Canvas";
-import useUserContext from '../hooks/useUserContext';
+import useGlobalContext from '../hooks/useGlobalContext';
 import axios from 'axios';
 
 import './Main.css';
@@ -17,9 +17,8 @@ const fetchAutomaton = async ({ username, automatonName }) => {
 
         if (data) {
             let { dfa: { nodes }, dfa: { edges } } = data;
-            nodes = updateColorForStartAndFinal(nodes)
-            ;
-            
+            nodes = updateColorForStartAndFinal(nodes);
+
             console.log('nodes', nodes);
             //console.log(nodes);
             return { nodes, edges }
@@ -42,18 +41,16 @@ const fetchAutomaton = async ({ username, automatonName }) => {
  * @returns new Array with colors added
  */
 const updateColorForStartAndFinal = (nodes, startColor = '#69995D', finalColor = '#9B2915') => {
-    return nodes.map( node => {
+    return nodes.map(node => {
         return node.start
-        ? {color: startColor, ...node}
-        : node.final
-        ? { color: finalColor , ...node }
-        : { ...node };
+            ? { color: startColor, ...node }
+            : node.final
+                ? { color: finalColor, ...node }
+                : { ...node };
     })
 }
 
 export const Main = () => {
-    /* const [userName, setUserName] = useState('');
-    const [automatonName, setAutomatonName] = useState(''); */
     const {
         setDfaModalShow,
         setConfirmModalShow,
@@ -63,8 +60,10 @@ export const Main = () => {
         setUserName,
         automatonName,
         setAutomatonName,
-        saveCanvasPNG
-    } = useUserContext();
+        saveCanvasPNG,
+        readAutomatons,
+        automatons,
+    } = useGlobalContext();
 
     const onChangeUserName = e => setUserName(e.target.value);
     const onChangeAutomatonName = e => setAutomatonName(e.target.value);
@@ -108,6 +107,17 @@ export const Main = () => {
         }, 3000)
     }
 
+    const [step, setStep] = useState(true);
+
+    const handleRunBySteps = () => {
+        setStep(!step);
+    }
+
+    const handlePrueba = async () => {
+        readAutomatons()
+        console.log(automatons)
+    }
+
     return (
         <Container className="mt-4">
 
@@ -142,23 +152,23 @@ export const Main = () => {
                                 }
                                 {` ${process.label}`}
                             </Button>
-                            <Button variant="dark" className="buttons dark-button" onClick={handleConfirmModalOpen}><i className="material-icons">restore</i> Clear</Button>
+                            <Button variant="dark" className="buttons dark-button" onClick={handleRunBySteps}>
+                                {
+                                    step ? <i className="material-icons">directions_walk</i> : <i className="material-icons">directions_run</i>
+                                }
+                                {' '}Run by Steps
+                            </Button>
                         </Col>
                     </Form.Group>
                 </div>
             </div>
 
-            <div className="automaton-options mb-3">
-                <div className="me-auto">
-                    <Button variant="outline-light" className="buttons" onClick={() => console.log('Rename')}><i className="material-icons">edit</i> Rename</Button>
-                    <Button variant="outline-light" className="buttons" onClick={() => console.log('Delete')}><i className="material-icons">delete</i> Delete</Button>
-                </div>
-
-                <div>
-                    <Button variant="outline-light" className="buttons" onClick={() => saveCanvasPNG()}><i className="material-icons">collections</i> Export DFA to PNG</Button>
-                    <Button variant="outline-light" className="buttons" onClick={() => console.log('Save Automaton')}><i className="material-icons">save</i> Save Automaton</Button>
-                    <Button variant="outline-light" className="buttons" onClick={handleDfaModalOpen}><i className="material-icons">search</i> Search Automaton</Button>
-                </div>
+            <div className="automaton-options mb-3 d-flex justify-content-end">
+                <Button variant="outline-light" className="buttons" onClick={handleConfirmModalOpen}><i className="material-icons">restore</i> Clear Canvas</Button>
+                <Button variant="outline-light" className="buttons" onClick={() => saveCanvasPNG()}><i className="material-icons">collections</i> Export DFA to PNG</Button>
+                <Button variant="outline-light" className="buttons" onClick={handlePrueba}><i className="material-icons">edit</i> Rename Automaton</Button>
+                <Button variant="outline-light" className="buttons" onClick={() => console.log('Save Automaton')}><i className="material-icons">save</i> Save Automaton</Button>
+                <Button variant="outline-light" className="buttons" onClick={handleDfaModalOpen}><i className="material-icons">search</i> Search Automaton</Button>
             </div>
 
             <div className="d-flex flex-row flex-wrap mb-3">
