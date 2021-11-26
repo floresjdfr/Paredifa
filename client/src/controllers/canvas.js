@@ -1,7 +1,3 @@
-function keyPressedHandler(event){
-
-}
-
 export function randomColor() {
     const red = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
     const green = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
@@ -9,12 +5,45 @@ export function randomColor() {
     return `#${red}${green}${blue}`;
 }
 
-export function getNewNodeID(network){
+export function getNewNodeID(network) {
     return network.body.data.nodes.length > 0 ? network.body.data.nodes.getIds().at(-1) + 1 : 1;
 }
 
-export function getNewEdgeID(network){
+export function getNewEdgeID(network) {
     return network.body.data.edges.length > 0 ? network.body.data.edges.getIds().at(-1) + 1 : 1;
+}
+
+export function deleteHandler(network) {
+    network.deleteSelected();
+}
+
+export function newStateHandler(network) {
+    network.addNodeMode({ color: 1 });
+}
+
+export function newTransitionHandler(network) {
+    network.addEdgeMode();
+}
+
+export function setStartHandler(network) {
+    let selectedNodeId = network.getSelectedNodes().at(0);
+    if (selectedNodeId) {
+        let node = network.body.data.nodes.get(selectedNodeId);
+        if (node) {
+            node.start = true;
+            node.final = false;
+        }
+    }
+}
+
+const updateColorForStartAndFinal = (nodes, startColor = '#69995D', finalColor = '#9B2915') => {
+    return nodes.map(node => {
+        return node.start
+            ? { color: startColor, ...node }
+            : node.final
+                ? { color: finalColor, ...node }
+                : { ...node };
+    })
 }
 
 

@@ -5,6 +5,7 @@ import useUserContext from '../hooks/useUserContext';
 import axios from 'axios';
 
 import './Main.css';
+import { deleteHandler, newStateHandler, newTransitionHandler } from '../controllers/canvas';
 
 const fetchAutomaton = async ({ username, automatonName }) => {
     try {
@@ -57,7 +58,8 @@ export const Main = () => {
         setUserName,
         automatonName,
         setAutomatonName,
-        saveCanvasPNG
+        saveCanvasPNG,
+        canvas
     } = useUserContext();
 
     const onChangeUserName = e => setUserName(e.target.value);
@@ -142,7 +144,25 @@ export const Main = () => {
                 </div>
             </div>
 
-            
+            <div className="automaton-options mb-3">
+                <div className="me-auto">
+                    <Button variant="outline-light" className="buttons" onClick={() => newStateHandler(canvas.network)}><i className="material-icons">radio_button_unchecked</i>New State</Button>
+
+                    <Button variant="outline-light" className="buttons" onClick={() => newTransitionHandler(canvas.network)}><i className="material-icons">redo</i>New Transition</Button>
+
+                    <Button variant="outline-light" className="buttons" onClick={() => deleteHandler(canvas.network)}><i className="material-icons">delete</i> Delete</Button>
+                    
+                    <Button variant="outline-light" className="buttons" onClick={() => console.log('Edit')}><i className="material-icons">start</i> Set Start</Button>
+
+                    <Button variant="outline-light" className="buttons" onClick={() => console.log('Edit')}><i className="material-icons">radio_button_checked</i> Set Final</Button>
+
+                </div>
+                <div>
+                    <Button variant="outline-light" className="buttons" onClick={() => saveCanvasPNG()}><i className="material-icons">collections</i> Export DFA to PNG</Button>
+                    <Button variant="outline-light" className="buttons" onClick={() => console.log('Save Automaton')}><i className="material-icons">save</i> Save Automaton</Button>
+                    <Button variant="outline-light" className="buttons" onClick={handleDfaModalOpen}><i className="material-icons">search</i> Search Automaton</Button>
+                </div>
+            </div>
 
             <div className="d-flex flex-row flex-wrap mb-3">
                 <div>
