@@ -1,9 +1,9 @@
 import { Modal, Button } from "react-bootstrap";
-import { DFATable } from "./table/DFATable";
-import useUserContext from "../../hooks/useUserContext";
+import { AutomatonsTable } from "./table/AutomatonsTable";
+import useGlobalContext from "../../hooks/useGlobalContext";
 
 export const SearchDFAModal = () => {
-    const { dfaModalShow, setDfaModalShow } = useUserContext();
+    const { dfaModalShow, setDfaModalShow } = useGlobalContext();
 
     const handleClose = () => {
         setDfaModalShow(false);
@@ -26,7 +26,7 @@ export const SearchDFAModal = () => {
             <Modal.Body>
 
                 {/* ====TABLE=== */}
-                <DFATable />
+                <AutomatonsTable />
 
             </Modal.Body>
             <Modal.Footer>

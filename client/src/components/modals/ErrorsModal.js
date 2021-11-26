@@ -1,8 +1,8 @@
 import { Offcanvas } from "react-bootstrap";
-import useUserContext from "../../hooks/useUserContext";
+import useGlobalContext from "../../hooks/useGlobalContext";
 
 export const ErrorsModal = () => {
-    const { errorsModalShow, setErrorsModalShow } = useUserContext();
+    const { errorsModalShow, setErrorsModalShow } = useGlobalContext();
 
     const handleClose = () => {
         setErrorsModalShow(false);

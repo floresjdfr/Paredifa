@@ -1,4 +1,4 @@
-import useUserContext from '../hooks/useUserContext';
+import useGlobalContext from '../hooks/useGlobalContext';
 import { DataSet, Network } from 'vis-network/standalone/esm/vis-network'
 import { useEffect, useRef } from 'react';
 import { addNode, addEdgeAction, deleteEdgeAction, randomColor, getNewNodeID, getNewEdgeID } from '../controllers/canvas'
@@ -18,7 +18,7 @@ const data = {
 
 export const Canvas = () => {
 
-    const { canvas, setCanvas, setEditTransitionModalShow } = useUserContext();
+    const { canvas, setCanvas, setEditTransitionModalShow, automatonName } = useGlobalContext();
 
     const domNode = useRef(null);
     const network = useRef(null);

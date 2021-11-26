@@ -1,12 +1,18 @@
-import { Modal, Button } from "react-bootstrap";
-import useUserContext from "../../hooks/useUserContext";
+import { useEffect } from "react";
+import { Modal, Button, Spinner } from "react-bootstrap";
+import useGlobalContext from "../../hooks/useGlobalContext";
 
 export const AboutModal = () => {
-    const { aboutModalShow, setAboutModalShow } = useUserContext();
+    const { aboutModalShow, setAboutModalShow, aboutUs, readAboutUs } = useGlobalContext();
 
     const handleClose = () => {
         setAboutModalShow(false);
     };
+
+    useEffect(() => {
+        readAboutUs();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <Modal
@@ -21,21 +27,24 @@ export const AboutModal = () => {
                     About Us
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-
-                <p className="text-center fw-bold">Universidad Nacional de Costa Rica</p>
-                <p className="text-center fw-bold">Escuela de Informática</p>
-                <p className="text-center fw-bold">EIF400: Paradigmas de Programación</p>
-                <p className="text-center fw-bold">Profesor: Dr. Carlos Loría Sáenz</p>
-                <p className="text-center fw-bold">II Ciclo 2021</p>
-                <p className="text-center fw-bold">Authors:</p>
-                <p className="text-center">Rolando Herrera Bustos</p>
-                <p className="text-center">Marvin Aguilar Fuentes</p>
-                <p className="text-center">Alonso Calderón Trigueros</p>
-                <p className="text-center">José David Flores Rodríguez</p>
-                <p className="text-center fw-bold">Group: 02-10am</p>
-                <p className="text-center fw-bold">Version 2.0</p>
-                
+            <Modal.Body className="text-center">
+                {
+                    Object.entries(aboutUs).length === 0 ?
+                        <Spinner animation="border" /> :
+                        <div>
+                            <p className="text-center fw-bold">{aboutUs.university}</p>
+                            <p className="text-center fw-bold">{aboutUs.school}</p>
+                            <p className="text-center fw-bold">{aboutUs.course}</p>
+                            <p className="text-center fw-bold">{aboutUs.professor}</p>
+                            <p className="text-center fw-bold">{aboutUs.cycle}</p>
+                            <p className="text-center fw-bold">Authors:</p>
+                            {aboutUs.authors.map((author) => (
+                                <p key={author.id}>ID: {author.id} - {author.name} - {author.hour}</p>
+                            ))}
+                            <p className="text-center fw-bold">Group: {aboutUs.group}</p>
+                            <p className="text-center fw-bold">Version {aboutUs.version}</p>
+                        </div>
+                }
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Close</Button>

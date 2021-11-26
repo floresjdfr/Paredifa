@@ -1,22 +1,21 @@
 import { Main } from './components/Main';
 import { Navigation } from './components/Navigation';
-import './App.css';
-import UserProvider from './context/UserContext';
 import { SearchDFAModal } from './components/modals/SearchDFAModal';
 import { ConfirmModal } from './components/modals/ConfirmModal';
 import { AboutModal } from './components/modals/AboutModal';
 import { InstructionsModal } from './components/modals/InstructionsModal';
 import { ErrorsModal } from './components/modals/ErrorsModal';
 import { EditTransitionModal } from './components/modals/EditTransitionModal';
+import GlobalProvider from './context/GlobalContext';
 
+import './App.css';
 
 function App() {
   return (
-    <UserProvider>
-      {/* ===NAVBAR=== */}
+    <GlobalProvider>
+
       <Navigation />
 
-      {/* ===MAIN CONTAINER=== */}
       <Main />
 
       <SearchDFAModal />
@@ -30,7 +29,8 @@ function App() {
       <InstructionsModal />
 
       <ErrorsModal />
-    </UserProvider>
+
+    </GlobalProvider>
   );
 }
 
