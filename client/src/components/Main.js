@@ -19,7 +19,7 @@ const fetchAutomaton = async ({ username, automatonName }) => {
             nodes = updateColorForStartAndFinal(nodes);
 
             console.log('nodes', nodes);
-            return { nodes, edges, nodesCounter, edgesCounter }
+            return { nodes, edges }
         }
         else {
             return {};

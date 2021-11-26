@@ -1,9 +1,9 @@
 import { Modal, Button, Form } from "react-bootstrap";
-import useUserContext from "../../hooks/useUserContext";
+import useGlobalContext from "../../hooks/useGlobalContext";
 import { useState } from "react";
 
 export const EditTransitionModal = () => {
-    const { canvas, setCanvas, editTransitionModalShow, setEditTransitionModalShow, } = useUserContext();
+    const { canvas, setCanvas, editTransitionModalShow, setEditTransitionModalShow, } = useGlobalContext();
 
     const [transitionLabelInput, SetTransitionLabelInput] = useState('');
 

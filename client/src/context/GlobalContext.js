@@ -28,6 +28,8 @@ const GlobalProvider = ({ ...props }) => {
     const [userName, setUserName] = useState('');
     const [automatonName, setAutomatonName] = useState('');
 
+    const[editTransitionModalShow, setEditTransitionModalShow] = useState(false);
+
     // https://www.npmjs.com/package/html2canvas
     const saveCanvasPNG = e => {
         html2canvas(document.querySelector("#canvas")).then(canvas => {
@@ -101,6 +103,8 @@ const GlobalProvider = ({ ...props }) => {
         setAboutModalShow,
         instructionsModalShow,
         setInstructionsModalShow,
+        editTransitionModalShow, 
+        setEditTransitionModalShow,
         saveCanvasPNG,
         errorsModalShow,
         setErrorsModalShow,
