@@ -63,7 +63,8 @@ const GlobalProvider = ({ ...props }) => {
 
     const addAutomaton = async () => {
         try {
-            const { data } = await api.readAutomatons(user?.email); // ARREGLAR
+            let newAutomaton;
+            const { data } = await api.addAutomaton(newAutomaton); // ARREGLAR
 
             dispatch({ type: CREATE, payload: data })
         } catch (error) {
@@ -73,7 +74,7 @@ const GlobalProvider = ({ ...props }) => {
 
     const updateAutomaton = async () => {
         try {
-            const { data } = await api.readAutomatons(user?.email); // ARREGLAR
+            const { data } = await api.updateAutomaton(); // ARREGLAR
             
             dispatch({ type: UPDATE, payload: data })
         } catch (error) {
@@ -83,7 +84,7 @@ const GlobalProvider = ({ ...props }) => {
 
     const deleteAutomaton = async () => {
         try {
-            const { data } = await api.readAutomatons(user?.email); // ARREGLAR
+            const { data } = await api.deleteAutomaton(); // ARREGLAR
             
             dispatch({ type: DELETE, payload: data })
         } catch (error) {
