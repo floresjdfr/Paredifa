@@ -1,18 +1,21 @@
 {
-  "name": "paredifa-node-server",
+  "name": "server",
   "version": "1.0.0",
-  "description": "proyecto programado de paradigmas de programacion 2da parte",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.mjs",
-    "server": "nodemon index.mjs"
+    "start": "nodemon src/index.mjs"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "mongoose": "^6.0.12",
+    "mongoose": "^6.0.13"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.15"
   }
 }

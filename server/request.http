@@ -1,0 +1,182 @@
+
+#############################################################################
+
+### addAutomaton
+POST http://localhost:3001/api/automatons HTTP/1.1
+Content-Type: application/json
+
+{
+    "userID": "116830152",
+    "newAutomaton": {
+            "automatonName": "Automata Prueba 1",
+            "nodes": [
+                {
+                    "id": 1,
+                    "label": "S0",
+                    "start": true,
+                    "final": false
+                },
+                {
+                    "id": 2,
+                    "label": "S1",
+                    "start": false,
+                    "final": false
+                },
+                {
+                    "id": 3,
+                    "label": "S2",
+                    "start": false,
+                    "final": true
+                }
+            ],
+            "edges": [
+                {
+                    "label": "0",
+                    "from": 1,
+                    "to": 1
+                },
+                {
+                    "label": "1",
+                    "from": 1,
+                    "to": 2
+                },
+                {
+                    "label": "1",
+                    "from": 2,
+                    "to": 1
+                },
+                {
+                    "label": "0",
+                    "from": 2,
+                    "to": 3
+                },
+                {
+                    "label": "0",
+                    "from": 3,
+                    "to": 2
+                },
+                {
+                    "label": "1",
+                    "from": 3,
+                    "to": 3
+                }
+            ]
+        }
+}
+
+### getAutomatons (DE PRUEBA)
+GET http://localhost:3001/api/automatons HTTP/1.1
+
+### readAutomatons
+GET http://localhost:3001/api/automatons/marvin.ag00@gmail.com HTTP/1.1
+
+### readAutomaton
+GET http://localhost:3001/api/automatons/116830152/Automata Prueba 1 HTTP/1.1
+
+### updateAutomaton
+PATCH http://localhost:3001/api/automatons/116830153/Automata update 3 HTTP/1.1
+Content-Type: application/json
+
+{
+    "updateAutomaton": {
+            "automatonName": "Automata update",
+            "nodes": [
+                {
+                    "id": 1,
+                    "label": "S0",
+                    "start": true,
+                    "final": false
+                },
+                {
+                    "id": 2,
+                    "label": "S1",
+                    "start": false,
+                    "final": false
+                },
+                {
+                    "id": 3,
+                    "label": "S2",
+                    "start": false,
+                    "final": true
+                }
+            ],
+            "edges": [
+                {
+                    "label": "0",
+                    "from": 1,
+                    "to": 1
+                },
+                {
+                    "label": "1",
+                    "from": 1,
+                    "to": 2
+                },
+                {
+                    "label": "1",
+                    "from": 2,
+                    "to": 1
+                },
+                {
+                    "label": "0",
+                    "from": 2,
+                    "to": 3
+                },
+                {
+                    "label": "0",
+                    "from": 3,
+                    "to": 2
+                },
+                {
+                    "label": "1",
+                    "from": 3,
+                    "to": 3
+                }
+            ]
+        }
+}
+
+
+### deleteAutomaton
+DELETE  http://localhost:3001/api/automatons/116830153/Automata update HTTP/1.1
+
+
+#############################################################################
+
+POST http://localhost:3001/api/AboutUs HTTP/1.1
+Content-Type: application/json
+
+{
+    "university": "Universidad Nacional de Costa Rica",
+    "school": "Escuela de Informática",
+    "course": "EIF400: Paradigmas de Programación",
+    "professor": "Profesor: Dr. Carlos Loría Sáenz",
+    "cycle": "II Ciclo 2021",
+    "authors": [
+        {
+            "id": "402330997",
+            "name": "Rolando Herrera Bustos",
+            "hour": "10am"
+        },
+        {
+            "id": "116830152",
+            "name": "Marvin Aguilar Fuentes",
+            "hour": "10am"
+        },
+        {
+            "id": "116880486",
+            "name": "Alonso Calderón Trigueros",
+            "hour": "10am"
+            
+        },
+        {
+            "id": "402390142",
+            "name": "José David Flores Rodríguez",
+            "hour": "10am"
+        }
+    ],
+    "group": "02-10am",
+    "version": "2.0"
+}
+
+###
+GET http://localhost:3001/api/AboutUs HTTP/1.1
