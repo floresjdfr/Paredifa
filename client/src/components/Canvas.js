@@ -1,4 +1,3 @@
-// import Graph from 'react-graph-vis'
 import useUserContext from '../hooks/useUserContext';
 import { DataSet, Network } from 'vis-network/standalone/esm/vis-network'
 import { useEffect, useRef } from 'react';
@@ -89,6 +88,7 @@ export const Canvas = () => {
         
         network.current.on('oncontext', ({ event }) => {
             event.preventDefault();
+            
         });
         setCanvas({ network: network.current });
     }, []);

@@ -14,6 +14,7 @@ export const EditTransitionModal = () => {
             network.body.data.edges.remove(lastItem);
         }
         setEditTransitionModalShow(false);
+        SetTransitionLabelInput('');
     }
     const handleAccept = (event) => {
         event.preventDefault();
@@ -22,6 +23,7 @@ export const EditTransitionModal = () => {
         transition.label = inputLabel;
         network.body.data.edges.update(transition);
         setCanvas({network});
+        SetTransitionLabelInput('');
         setEditTransitionModalShow(false);
     }
     const handleInputChange = (event) => {
@@ -38,7 +40,7 @@ export const EditTransitionModal = () => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-tittle-vcenter">
-                    Edit Transition
+                Transition
                 </Modal.Title>
             </Modal.Header>
 
@@ -48,7 +50,7 @@ export const EditTransitionModal = () => {
                         <Form.Label>Transition</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Transition"
+                            placeholder="Transitions must be separated by comma(,)"
                             value={transitionLabelInput}
                             onChange={handleInputChange}
                         />
