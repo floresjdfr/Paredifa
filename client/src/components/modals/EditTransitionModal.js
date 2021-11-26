@@ -7,7 +7,6 @@ export const EditTransitionModal = () => {
 
     const [transitionLabelInput, SetTransitionLabelInput] = useState('');
 
-
     const {network, lastItem} = canvas;
 
     const handleCancel = () => {
@@ -17,11 +16,12 @@ export const EditTransitionModal = () => {
         setEditTransitionModalShow(false);
     }
     const handleAccept = (event) => {
+        event.preventDefault();
         const inputLabel = transitionLabelInput;
         let transition = network.body.data.edges.get(lastItem);
         transition.label = inputLabel;
-        // network.body.data.edges.update(transition);
-        //setCanvas({network});
+        network.body.data.edges.update(transition);
+        setCanvas({network});
         setEditTransitionModalShow(false);
     }
     const handleInputChange = (event) => {
@@ -32,7 +32,7 @@ export const EditTransitionModal = () => {
         <Modal
             show={editTransitionModalShow}
             onHide={handleCancel}
-            size="lg"
+            size="sg"
             aria-labelledby="contained-modal-tittle-vcenter"
             centered
         >

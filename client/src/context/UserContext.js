@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react';
 import html2canvas from 'html2canvas';
+import { DataSet, Network } from 'vis-network/standalone/esm/vis-network'
 
 export const UserContext = createContext();
 
@@ -12,8 +13,8 @@ const UserProvider = ({ ...props }) => {
 
     //Canvas related
     const [canvas, setCanvas] = useState({});
-    const[editTransitionModalShow, setEditTransitionModalShow] = useState(false);
-    const[editStateModalShow, setEditStateModalShow] = useState(false);
+    const [editTransitionModalShow, setEditTransitionModalShow] = useState(false);
+    const [editStateModalShow, setEditStateModalShow] = useState(false);
 
     const [userName, setUserName] = useState('');
     const [automatonName, setAutomatonName] = useState('');
