@@ -5,6 +5,7 @@ import useGlobalContext from '../hooks/useGlobalContext';
 import axios from 'axios';
 
 import './Main.css';
+import { deleteHandler, newStateHandler, newTransitionHandler } from '../controllers/canvas';
 
 const fetchAutomaton = async ({ username, automatonName }) => {
     try {
@@ -12,21 +13,17 @@ const fetchAutomaton = async ({ username, automatonName }) => {
 
         const { data } = await axios
             .post(url, { username, automatonName });
-
         console.log(data);
-
         if (data) {
             let { dfa: { nodes }, dfa: { edges } } = data;
             nodes = updateColorForStartAndFinal(nodes);
 
             console.log('nodes', nodes);
-            //console.log(nodes);
             return { nodes, edges }
         }
         else {
             return {};
         }
-
     } catch (error) {
         return {};
     }
@@ -61,6 +58,7 @@ export const Main = () => {
         automatonName,
         setAutomatonName,
         saveCanvasPNG,
+        canvas,
         readAutomatons,
         automatons,
     } = useGlobalContext();
@@ -84,7 +82,7 @@ export const Main = () => {
         setCanvas({ graph: {} });
         const fetchElement = async () => {
             const res = await fetchAutomaton({ username: userName, automatonName: automatonName });
-            setCanvas({ graph: res })
+            setCanvas({ graph: res, selectedNodes: [], selectedEdges: [] })
         }
         fetchElement();
     }
@@ -163,47 +161,59 @@ export const Main = () => {
                 </div>
             </div>
 
-            <div className="automaton-options mb-3 d-flex justify-content-end">
-                <Button variant="outline-light" className="buttons" onClick={handleConfirmModalOpen}><i className="material-icons">restore</i> Clear Canvas</Button>
-                <Button variant="outline-light" className="buttons" onClick={() => saveCanvasPNG()}><i className="material-icons">collections</i> Export DFA to PNG</Button>
-                <Button variant="outline-light" className="buttons" onClick={handlePrueba}><i className="material-icons">edit</i> Rename Automaton</Button>
-                <Button variant="outline-light" className="buttons" onClick={() => console.log('Save Automaton')}><i className="material-icons">save</i> Save Automaton</Button>
-                <Button variant="outline-light" className="buttons" onClick={handleDfaModalOpen}><i className="material-icons">search</i> Search Automaton</Button>
+    <div className="automaton-options mb-3">
+        <div className="me-auto">
+            <Button variant="outline-light" className="buttons" onClick={() => newStateHandler(canvas.network)}><i className="material-icons">radio_button_unchecked</i>New State</Button>
+
+            <Button variant="outline-light" className="buttons" onClick={() => newTransitionHandler(canvas.network)}><i className="material-icons">redo</i>New Transition</Button>
+
+            <Button variant="outline-light" className="buttons" onClick={() => deleteHandler(canvas.network)}><i className="material-icons">delete</i> Delete</Button>
+
+            <Button variant="outline-light" className="buttons" onClick={() => console.log('Edit')}><i className="material-icons">start</i> Set Start</Button>
+
+            <Button variant="outline-light" className="buttons" onClick={() => console.log('Edit')}><i className="material-icons">radio_button_checked</i> Set Final</Button>
+
+        </div>
+        <div>
+            <Button variant="outline-light" className="buttons" onClick={() => saveCanvasPNG()}><i className="material-icons">collections</i> Export DFA to PNG</Button>
+            <Button variant="outline-light" className="buttons" onClick={() => console.log('Save Automaton')}><i className="material-icons">save</i> Save Automaton</Button>
+            <Button variant="outline-light" className="buttons" onClick={handleDfaModalOpen}><i className="material-icons">search</i> Search Automaton</Button>
+        </div>
+        </div>
+
+        <div className="d-flex flex-row flex-wrap mb-3">
+            <div>
+                <Form.Group as={Row} controlId=" ">
+                    <Form.Label column md="auto" className="fw-bold">
+                        Username:
+                    </Form.Label>
+                    <Col md="auto">
+                        <Form.Control type="text" placeholder="Username" onChange={onChangeUserName} value={userName} />
+                    </Col>
+                </Form.Group>
+            </div>
+            <div className="ms-2">
+                <Form.Group as={Row} controlId=" ">
+                    <Form.Label column md="auto" className="fw-bold">
+                        Automaton Name:
+                    </Form.Label>
+                    <Col md="auto">
+                        <Form.Control type="text" placeholder="Automaton Name" onChange={onChangeAutomatonName} value={automatonName} />
+                    </Col>
+                </Form.Group>
             </div>
 
-            <div className="d-flex flex-row flex-wrap mb-3">
-                <div>
-                    <Form.Group as={Row} controlId=" ">
-                        <Form.Label column md="auto" className="fw-bold">
-                            Username:
-                        </Form.Label>
-                        <Col md="auto">
-                            <Form.Control type="text" placeholder="Username" onChange={onChangeUserName} value={userName} />
-                        </Col>
-                    </Form.Group>
-                </div>
-                <div className="ms-2">
-                    <Form.Group as={Row} controlId=" ">
-                        <Form.Label column md="auto" className="fw-bold">
-                            Automaton Name:
-                        </Form.Label>
-                        <Col md="auto">
-                            <Form.Control type="text" placeholder="Automaton Name" onChange={onChangeAutomatonName} value={automatonName} />
-                        </Col>
-                    </Form.Group>
-                </div>
-
-                <div className="me-auto">
-                    <Button variant="dark" className="buttons dark-button" onClick={handleShowCanvas}><i className="material-icons">search</i> Search</Button>
-                </div>
-
-                <div>
-                    <Button variant="danger" className="buttons" onClick={handleErrorsModalOpen}><i className="material-icons">error</i> Show Errors</Button>
-                </div>
+            <div className="me-auto">
+                <Button variant="dark" className="buttons dark-button" onClick={handleShowCanvas}><i className="material-icons">search</i> Search</Button>
             </div>
 
-            <Canvas />
+            <div>
+                <Button variant="danger" className="buttons" onClick={handleErrorsModalOpen}><i className="material-icons">error</i> Show Errors</Button>
+            </div>
+        </div>
 
-        </Container>
+        <Canvas />
+
+    </Container>
     )
 }

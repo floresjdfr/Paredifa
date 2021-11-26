@@ -8,7 +8,7 @@ export default function appReducer(state, action) {
         case FETCH_AUTOMATONS:
             return { ...state, automatons: action.payload };
         case CREATE:
-            return { ...state, automatons: [...automatonsm, action.payload] };
+            return { ...state, automatons: [...state.automatons, action.payload] };
         case UPDATE:
             return;
         case DELETE:

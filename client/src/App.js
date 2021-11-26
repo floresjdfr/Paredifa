@@ -5,6 +5,7 @@ import { ConfirmModal } from './components/modals/ConfirmModal';
 import { AboutModal } from './components/modals/AboutModal';
 import { InstructionsModal } from './components/modals/InstructionsModal';
 import { ErrorsModal } from './components/modals/ErrorsModal';
+import { EditTransitionModal } from './components/modals/EditTransitionModal';
 import GlobalProvider from './context/GlobalContext';
 
 import './App.css';
@@ -22,6 +23,8 @@ function App() {
       <ConfirmModal />
 
       <AboutModal />
+
+      <EditTransitionModal/>
 
       <InstructionsModal />
 
