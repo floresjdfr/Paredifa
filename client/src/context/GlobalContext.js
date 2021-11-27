@@ -26,6 +26,7 @@ const GlobalProvider = ({ ...props }) => {
     const [canvas, setCanvas] = useState({ graph: {} });
 
     const [currentAutomaton, setCurrentAutomaton] = useState('');
+    const [path, setPath] = useState('');
 
     const [editTransitionModalShow, setEditTransitionModalShow] = useState(false);
 
@@ -155,6 +156,7 @@ const GlobalProvider = ({ ...props }) => {
         patchAutomaton,
         toastModal,
         setToastModal,
+        path, setPath,
     }
 
     return <GlobalContext.Provider {...props} value={value} />;

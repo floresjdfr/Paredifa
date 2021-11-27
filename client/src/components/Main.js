@@ -4,7 +4,7 @@ import { Canvas } from "./Canvas";
 import useGlobalContext from '../hooks/useGlobalContext';
 
 import './Main.css';
-import { deleteHandler, newStateHandler, newTransitionHandler, setFinalHandler, setStartHandler } from '../controllers/canvas';
+import { deleteHandler, newStateHandler, newTransitionHandler, setFinalHandler, setStartHandler, runAnimation, requestRun } from '../controllers/canvas';
 import { ToastModal } from './modals/ToastModal';
 
 /**
@@ -14,7 +14,7 @@ import { ToastModal } from './modals/ToastModal';
  * @param {*} finalColor => String
  * @returns new Array with colors added
  */
-const updateColorForStartAndFinal = (nodes, startColor = '#69995D', finalColor = '#9B2915') => {
+/* const updateColorForStartAndFinal = (nodes, startColor = '#69995D', finalColor = '#9B2915') => {
     return nodes.map(node => {
         return node.start
             ? { color: startColor, ...node }
@@ -22,7 +22,7 @@ const updateColorForStartAndFinal = (nodes, startColor = '#69995D', finalColor =
                 ? { color: finalColor, ...node }
                 : { ...node };
     })
-}
+} */
 
 export const Main = () => {
     const {
@@ -34,7 +34,10 @@ export const Main = () => {
         mode,
         saveAutomaton,
         patchAutomaton,
+        path, setPath
     } = useGlobalContext();
+
+    const onChangePath = e => setPath(e.target.value);
 
     const handleDfaModalOpen = () => {
         setDfaModalShow(true);
@@ -66,17 +69,21 @@ export const Main = () => {
         isRunning: false
     });
 
-    const handleRun = () => {
+    const handleRun = async () => {
         setProcess({
             label: 'Running',
             isRunning: true
         })
-        setTimeout(() => {
-            setProcess({
-                label: "Run",
-                isRunning: false
-            })
-        }, 3000)
+        const data = await requestRun(path, canvas.network);
+        const pathList = data.path;
+        const result = data.result;
+        if (result) {
+            runAnimation(canvas.network, pathList);
+        }
+        setProcess({
+            label: "Run",
+            isRunning: false
+        })
     }
 
     const [step, setStep] = useState(true);
@@ -112,7 +119,7 @@ export const Main = () => {
                 <div>
                     <Form.Group as={Row} className="mb-3" controlId=" ">
                         <Col md="auto">
-                            <Form.Control type="text" placeholder="Path" />
+                            <Form.Control type="text" placeholder="Path" onChange={onChangePath} />
                         </Col>
                         <Col md="auto">
                             <Button variant="dark" className="buttons dark-button" onClick={handleRun}>
