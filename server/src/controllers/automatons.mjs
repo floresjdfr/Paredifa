@@ -71,12 +71,14 @@ export const readAutomaton = async (req, res) => {
 /* ====================================UPDATE==================================== */
 
 export const updateAutomaton = (req, res) => {
-    const { userID, autName } = req.params;
+    const { userID, autId } = req.params;
     const { updateAutomaton } = req.body;
+
+    console.log(autId)
 
     automatonModel
         .findOneAndUpdate(
-            { userID: userID, "dfa.automatonName": autName },
+            { userID: userID, "dfa._id": autId },
             { $set: { "dfa.$": updateAutomaton } },
             { new: true, setDefaultsOnInsert: true }
         )

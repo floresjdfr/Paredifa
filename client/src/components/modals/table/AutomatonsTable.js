@@ -3,14 +3,13 @@ import { Button, Alert } from "react-bootstrap";
 import useGlobalContext from '../../../hooks/useGlobalContext';
 import { useAuth0 } from '@auth0/auth0-react';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
-import { DataSet } from 'vis-network/standalone/esm/vis-network'
 import { updateColorForStartAndFinal } from '../../../controllers/canvas';
 var $ = require('jquery');
 $.DataTable = require('datatables.net');
 
 
 export const AutomatonsTable = () => {
-    const { automatons, readAutomatons, deleteAutomaton, canvas, setDfaModalShow } = useGlobalContext();
+    const { automatons, readAutomatons, deleteAutomaton, canvas, setDfaModalShow, setCurrentAutomaton } = useGlobalContext();
     const { isAuthenticated } = useAuth0();
     const [alert, setAlert] = useState({ automatonName: '', show: false });
 
@@ -18,6 +17,8 @@ export const AutomatonsTable = () => {
 
     const handleDisplayAutomaton = (id) => {
         let automaton = automatons.find(automaton => automaton._id === id);
+
+        setCurrentAutomaton(automaton);
 
         let { nodes, edges } = automaton;
 
@@ -37,7 +38,7 @@ export const AutomatonsTable = () => {
         setTimeout(() => setAlert({ ...alert, show: false }), 2000);
     }
 
-    /* useEffect(() => {
+    useEffect(() => {
         $('#display').DataTable({
             fixedHeader: true,
             pageLength: 5,
@@ -47,12 +48,6 @@ export const AutomatonsTable = () => {
             ],
         });
         fetchAutomatons();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); */
-
-    useEffect(() => {
-        fetchAutomatons();
-        
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -96,7 +91,7 @@ export const AutomatonsTable = () => {
                         : <p>Not Data Found</p>
                     : <p>Please login to see the list of your automatons!</p>
             }
-            <Alert show={alert.show} variant="success">
+            <Alert show={alert.show} variant="success" transition>
                 DFA: "{alert.automatonName}" has been successfully removed!
             </Alert>
         </div>

@@ -31,6 +31,8 @@ const GlobalProvider = ({ ...props }) => {
 
     const [mode, setMode] = useState('DFA');
 
+    const [toastModal, setToastModal] = useState({ message: '', show: false });
+
     // https://www.npmjs.com/package/html2canvas
     const saveCanvasPNG = e => {
         html2canvas(document.querySelector("#canvas")).then(canvas => {
@@ -40,6 +42,28 @@ const GlobalProvider = ({ ...props }) => {
             link.href = img;
             link.click();
         });
+    }
+
+    const saveAutomaton = () => {
+        let { network } = canvas;
+        let nodes = network.body.data.nodes.get();
+        let edges = network.body.data.edges.get();
+
+        if (nodes.length !== 0 && edges.length !== 0) {
+            const newAutomaton =
+            {
+                userID: user?.email,
+                newAutomaton:
+                {
+                    automatonName: 'prueba add',
+                    nodes: nodes,
+                    edges: edges
+                }
+            }
+
+            addAutomaton(newAutomaton);
+            setToastModal({ message: 'Automaton Stored Correctly!!', show: true });
+        }
     }
 
     const [state, dispatch] = useReducer(appReducer, initialState)
@@ -64,9 +88,8 @@ const GlobalProvider = ({ ...props }) => {
         }
     }
 
-    const addAutomaton = async () => {
+    const addAutomaton = async (newAutomaton) => {
         try {
-            let newAutomaton;
             const { data } = await api.addAutomaton(newAutomaton); // ARREGLAR
 
             dispatch({ type: CREATE, payload: data })
@@ -123,6 +146,9 @@ const GlobalProvider = ({ ...props }) => {
 
         mode,
         setMode,
+        saveAutomaton,
+        toastModal,
+        setToastModal,
     }
 
     return <GlobalContext.Provider {...props} value={value} />;

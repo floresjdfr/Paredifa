@@ -15,7 +15,7 @@ const data = {
 
 export const Canvas = () => {
 
-    const { canvas, setCanvas, setEditTransitionModalShow, currentAutomaton } = useGlobalContext();
+    const { setCanvas, setEditTransitionModalShow } = useGlobalContext();
 
     const domNode = useRef(null);
     const network = useRef(null);

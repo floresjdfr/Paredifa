@@ -2,16 +2,17 @@ import { Modal, Button } from "react-bootstrap";
 import useGlobalContext from "../../hooks/useGlobalContext";
 
 export const ConfirmModal = () => {
-    const { confirmModalShow, setConfirmModalShow, setCanvas, setUserName, setAutomatonName } = useGlobalContext();
+    const { confirmModalShow, setConfirmModalShow, canvas } = useGlobalContext();
 
     const handleClose = () => {
         setConfirmModalShow(false);
     };
 
     const handleClearCanvas = () => {
-        setCanvas({ graph: {} });
-        setUserName('');
-        setAutomatonName('');
+        let { network } = canvas;
+
+        network.body.data.nodes.clear();
+        network.body.data.edges.clear();
     }
 
     return (

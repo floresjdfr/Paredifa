@@ -5,6 +5,7 @@ import useGlobalContext from '../hooks/useGlobalContext';
 
 import './Main.css';
 import { deleteHandler, newStateHandler, newTransitionHandler, setFinalHandler, setStartHandler } from '../controllers/canvas';
+import { ToastModal } from './modals/ToastModal';
 
 /**
  * Changes the node's color if they are start or final node
@@ -28,10 +29,10 @@ export const Main = () => {
         setDfaModalShow,
         setConfirmModalShow,
         setErrorsModalShow,
-        setCanvas,
         saveCanvasPNG,
         canvas,
         mode,
+        saveAutomaton,
     } = useGlobalContext();
 
     const handleDfaModalOpen = () => {
@@ -46,8 +47,8 @@ export const Main = () => {
         setErrorsModalShow(true);
     }
 
-    const handleShowCanvas = () => {
-        setCanvas({ graph: {} });
+    const handleSaveAutomaton = () => {
+        saveAutomaton();
     }
 
     const [process, setProcess] = useState({
@@ -143,14 +144,15 @@ export const Main = () => {
                 </div>
                 <div>
                     <Button variant="outline-light" className="buttons" onClick={() => saveCanvasPNG()}><i className="material-icons">collections</i> Export DFA to PNG</Button>
-                    <Button variant="outline-light" className="buttons" onClick={() => console.log('Save Automaton')}><i className="material-icons">save</i> Save Automaton</Button>
+                    <Button variant="outline-light" className="buttons" onClick={handleSaveAutomaton}><i className="material-icons">save</i> Save Automaton</Button>
                     <Button variant="outline-light" className="buttons" onClick={handleDfaModalOpen}><i className="material-icons">search</i> Search Automaton</Button>
                 </div>
             </div>
 
             <div className="d-flex flex-row flex-wrap mb-3">
                 <div className="me-auto">
-                    <Button variant="dark" className="buttons dark-button" onClick={handleConfirmModalOpen}><i className="material-icons">restore</i> Clear Canvas</Button>
+                    <Button variant="dark" className="buttons dark-button" onClick={handleConfirmModalOpen}><i className="material-icons">border_clear</i> Clear Canvas</Button>
+                    <Button variant="dark" className="buttons dark-button" onClick={() => console.log('update')}><i className="material-icons">update</i> Update Automaton</Button>
                 </div>
 
                 <div>
@@ -159,6 +161,8 @@ export const Main = () => {
             </div>
 
             <Canvas />
+
+            <ToastModal />
 
         </Container>
     )
