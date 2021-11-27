@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import automatonRoutes from './routes/automatons.mjs'
 import aboutUsRoutes from './routes/aboutUs.mjs'
+import { run } from './controllers/prolog.mjs';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ const PORT = process.env.PORT || 3001;
 // middleware
 app.use('/api', aboutUsRoutes);
 app.use('/api', automatonRoutes);
+app.use('/api', run);
 
 // routes
 app.get("/", (req, res) => {

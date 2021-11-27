@@ -45,20 +45,25 @@ export const Canvas = () => {
             multiselect: true,
             selectConnectedEdges: false
         },
+        physics: {
+            enabled: false,     // Stops node movement during display
+            stabilization: {    // Determines an initial layout; enabled by default
+                enabled: true,
+                iterations: 1000
+            }
+        },
         manipulation: {
             enabled: false,
             addNode: function (data, callback) {
                 let id = getNewNodeID(network.current);
+                
                 data.id = id;
                 data.label = `s${id}`;
                 callback(data);
-                setCanvas(() =>{
-                    return {
-                        network: network.current,
-                        lastItem: id
-                    }
-                })
-                
+                delete data.x;
+                delete data.y;
+                network.current.body.data.nodes.update(data);
+
             },
             addEdge: async function (data, callback) {
                 let id = getNewEdgeID(network.current);
@@ -68,14 +73,14 @@ export const Canvas = () => {
                 // data.label = `${id}`;
                 data.arrows = "to";
                 callback(data);
-                setCanvas(() =>{
+                setCanvas(() => {
                     return {
                         network: network.current,
                         lastItem: id
                     }
                 })
                 setEditTransitionModalShow(true);
-                
+
             }
         }
     };
@@ -87,7 +92,7 @@ export const Canvas = () => {
         setCanvas({ network: network.current });
     }, []);
 
-    
+
     return (
         <div className="canvas" id="canvas" ref={domNode}
             onKeyPress={(e) => {

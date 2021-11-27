@@ -4,7 +4,7 @@ import { Canvas } from "./Canvas";
 import useGlobalContext from '../hooks/useGlobalContext';
 
 import './Main.css';
-import { deleteHandler, newStateHandler, newTransitionHandler, setFinalHandler, setStartHandler } from '../controllers/canvas';
+import { deleteHandler, newStateHandler, newTransitionHandler, setFinalHandler, setStartHandler, runAnimation, requestRun } from '../controllers/canvas';
 import { ToastModal } from './modals/ToastModal';
 
 /**
@@ -33,7 +33,10 @@ export const Main = () => {
         canvas,
         mode,
         saveAutomaton,
+        path, setPath
     } = useGlobalContext();
+
+    const onChangePath = e => setPath(e.target.value);
 
     const handleDfaModalOpen = () => {
         setDfaModalShow(true);
@@ -56,17 +59,21 @@ export const Main = () => {
         isRunning: false
     });
 
-    const handleRun = () => {
+    const handleRun = async () => {
         setProcess({
             label: 'Running',
             isRunning: true
         })
-        setTimeout(() => {
-            setProcess({
-                label: "Run",
-                isRunning: false
-            })
-        }, 3000)
+        const data = await requestRun(path, canvas.network);
+        const pathList = data.path;
+        const result = data.result;
+        if (result) {
+            runAnimation(canvas.network, pathList);
+        }
+        setProcess({
+            label: "Run",
+            isRunning: false
+        })
     }
 
     const [step, setStep] = useState(true);
@@ -102,7 +109,7 @@ export const Main = () => {
                 <div>
                     <Form.Group as={Row} className="mb-3" controlId=" ">
                         <Col md="auto">
-                            <Form.Control type="text" placeholder="Path" />
+                            <Form.Control type="text" placeholder="Path" onChange={onChangePath} />
                         </Col>
                         <Col md="auto">
                             <Button variant="dark" className="buttons dark-button" onClick={handleRun}>

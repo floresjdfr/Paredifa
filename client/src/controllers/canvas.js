@@ -1,4 +1,4 @@
-
+import * as api from '../api/index.js';
 
 /**
  * Generates a random color
@@ -52,7 +52,7 @@ export function setStartHandler(network) {
     let selectedNodeId = network.getSelectedNodes().at(0);
     let node = network.body.data.nodes.get(selectedNodeId);
 
-    if(node.start) removeStartState(network);
+    if (node.start) removeStartState(network);
     else {
         removeStartState(network);
         node.start = true;
@@ -61,7 +61,6 @@ export function setStartHandler(network) {
     node = updateColorForStartAndFinal([node]);
     network.body.data.nodes.update(node);
 }
-
 /**
  * Sets or unsets the selected nodes as 'Start Node'
  * @param {*} network 
@@ -117,3 +116,69 @@ export const updateColorForStartAndFinal = (nodes, defaultColor = '#F18F01', sta
     });
     return result;
 }
+
+function getNodeByLabel(network, label) {
+    return network.body.data.nodes.get({
+        filter: function (item) {
+            return (item.label === label);
+        }
+    })[0];
+}
+
+
+const setAsyncTimeout = (cb, timeout = 0) => new Promise(resolve => {
+    setTimeout(() => {
+        cb();
+        resolve();
+    }, timeout);
+});
+
+export function runAnimation(network, nodes = null, animationTime = 1000, animationColor = "#C7D6D5", defaultColor = "#F18F01") {
+
+    let currentState = null;
+    let lastColor = null;
+
+    const delay = (ms) => {
+        return new Promise((resolve) => {
+            setTimeout(() => resolve(), ms);
+        }, ms);
+    };
+
+    const running = async function () {
+        for (var i = 0; i < nodes.length; i++) {
+
+            //Get current setting of the node
+            currentState = getNodeByLabel(network, nodes[i]);
+            lastColor = currentState.color ? currentState.color : null;
+
+            //Set animation color
+            currentState.color = animationColor;
+            network.body.data.nodes.update(currentState);
+
+            console.log("Nodo: ", i);
+
+            await delay(animationTime);
+            //Set animation color
+            lastColor ? currentState.color = lastColor : currentState.color = defaultColor;
+            network.body.data.nodes.update(currentState);
+            
+        }
+    };
+
+    running();
+}
+
+export const requestRun = async (path, network) => {
+
+    let nodes = network.body.data.nodes.get();
+    let edges = network.body.data.edges.get();
+    let body = {
+        dfa: {
+            nodes,
+            edges
+        },
+        path
+    };
+    let { data } = await api.run(body);
+    return data;
+};

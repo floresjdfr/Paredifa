@@ -10,3 +10,4 @@ export const deleteAutomaton = (userID, autId) => axios.delete(`${url}/automaton
 
 /* SIN PROBAR */
 export const updateAutomaton = (userID, autId, body) => axios.patch(`${url}/automatons/${userID}/${autId}`, body);
+export const run = (body) => axios.post(`${url}/run`, body);
