@@ -5,7 +5,7 @@ import useGlobalContext from '../hooks/useGlobalContext';
 import axios from 'axios';
 
 import './Main.css';
-import { deleteHandler, newStateHandler, newTransitionHandler } from '../controllers/canvas';
+import { deleteHandler, newStateHandler, newTransitionHandler, setFinalHandler, setStartHandler } from '../controllers/canvas';
 
 const fetchAutomaton = async ({ username, automatonName }) => {
     try {
@@ -169,9 +169,9 @@ export const Main = () => {
 
             <Button variant="outline-light" className="buttons" onClick={() => deleteHandler(canvas.network)}><i className="material-icons">delete</i> Delete</Button>
 
-            <Button variant="outline-light" className="buttons" onClick={() => console.log('Edit')}><i className="material-icons">start</i> Set Start</Button>
+            <Button variant="outline-light" className="buttons" onClick={() => setStartHandler(canvas.network)}><i className="material-icons">start</i> Set Start</Button>
 
-            <Button variant="outline-light" className="buttons" onClick={() => console.log('Edit')}><i className="material-icons">radio_button_checked</i> Set Final</Button>
+            <Button variant="outline-light" className="buttons" onClick={() => setFinalHandler(canvas.network) }><i className="material-icons">radio_button_checked</i> Set Final</Button>
 
         </div>
         <div>

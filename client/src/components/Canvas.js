@@ -1,7 +1,7 @@
 import useGlobalContext from '../hooks/useGlobalContext';
 import { DataSet, Network } from 'vis-network/standalone/esm/vis-network'
 import { useEffect, useRef } from 'react';
-import { addNode, addEdgeAction, deleteEdgeAction, randomColor, getNewNodeID, getNewEdgeID } from '../controllers/canvas'
+import { getNewNodeID, getNewEdgeID } from '../controllers/canvas'
 import './Canvas.css';
 
 
@@ -83,26 +83,12 @@ export const Canvas = () => {
         }
     };
 
+    //stata:{network:network}
+
     useEffect(() => {
         network.current = new Network(domNode.current, data, options);
-        
-        network.current.on('oncontext', ({ event }) => {
-            event.preventDefault();
-            
-        });
         setCanvas({ network: network.current });
     }, []);
-
-
-    const createNode = () => {
-        addNode(setCanvas, network.current);
-    }
-    const addEdge = () => {
-        addEdgeAction(setCanvas, network.current);
-    }
-    const removeNode = () => {
-        deleteEdgeAction(setCanvas, network.current);
-    }
 
     
     return (
