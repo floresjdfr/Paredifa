@@ -26,6 +26,10 @@ export const AutomatonsTable = () => {
 
         let { network } = canvas;
 
+        //Limpia el canvas
+        network.body.data.nodes.clear();
+        network.body.data.edges.clear();
+
         network.body.data.nodes.add(nodes);
         network.body.data.edges.add(edges);
 

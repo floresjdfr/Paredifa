@@ -6,7 +6,7 @@ export const ToastModal = () => {
 
     return (
         <ToastContainer className="p-3" position='middle-center'>
-            <Toast onClose={() => setToastModal({ ...toastModal, show: false })} show={toastModal.show} delay={3000} autohide>
+            <Toast onClose={() => setToastModal({ ...toastModal, show: false })} show={toastModal.show} delay={3200} autohide>
                 <Toast.Header>
                     <strong className="me-auto">Feedback</strong>
                     <small>A few seconds ago</small>

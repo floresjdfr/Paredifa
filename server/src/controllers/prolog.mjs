@@ -1,21 +1,6 @@
-// import fetch from 'node-fetch';
 import axios from 'axios';
-/* import {parse, stringify} from 'flatted'; */
 
-// export const run = (req, res)=>{
-//     fetch("http://localhost:9000/run",{
-//         method: "POST",
-//         body: JSON.stringify(prepareRequest(req.body))
-//     }).then((response) => {
-//          console.log(response);
-//          res.json(response);
-//         // res.body = response.json();
-//     })
-//     .catch((error) => res.status(404).json({ message: error.message }));
-// }
-
-
-export const run = async (req, res) => {
+/* export const run = async (req, res) => {
     let auxJson = prepareRequest(req.body);
     axios.post("http://localhost:9000/run", auxJson)
         .then(response => {
@@ -25,8 +10,15 @@ export const run = async (req, res) => {
             // console.log(res);
             // console.log(response);
         });
-}
+} */
 
+export const run = async (req, res) => {
+    let auxJson = prepareRequest(req.body);
+
+    axios.post("http://localhost:9000/run", auxJson)
+        .then((response) => res.status(200).json(response.data))
+        .catch((error) => res.status(404).json({ message: error.message }))
+}
 
 function prepareRequest({ path, dfa }) {
     let json = {

@@ -16,7 +16,7 @@ const initialState = {
 export const GlobalContext = createContext(initialState);
 
 const GlobalProvider = ({ ...props }) => {
-    const { user } = useAuth0();
+    const { user, isAuthenticated } = useAuth0();
     const [dfaModalShow, setDfaModalShow] = useState(false);
     const [confirmModalShow, setConfirmModalShow] = useState(false);
     const [aboutModalShow, setAboutModalShow] = useState(false);
@@ -36,40 +36,56 @@ const GlobalProvider = ({ ...props }) => {
 
     // https://www.npmjs.com/package/html2canvas
     const saveCanvasPNG = e => {
-        html2canvas(document.querySelector("#canvas")).then(canvas => {
-            let img = canvas.toDataURL("image/png");
-            let link = document.createElement('a');
-            link.download = currentAutomaton.automatonName + '.png';
-            link.href = img;
-            link.click();
-        });
-    }
-
-    const saveAutomaton = () => {
         let { network } = canvas;
         let nodes = network.body.data.nodes.get();
         let edges = network.body.data.edges.get();
 
         if (nodes.length !== 0 && edges.length !== 0) {
-            const newAutomaton =
-            {
-                userID: user?.email,
-                newAutomaton:
-                {
-                    automatonName: 'prueba acc',
-                    nodes: nodes,
-                    edges: edges
-                }
-            }
-
-            addAutomaton(newAutomaton);
-            setToastModal({ message: 'Automaton Stored Correctly!!', show: true });
+            html2canvas(document.querySelector("#canvas")).then(canvas => {
+                let img = canvas.toDataURL("image/png");
+                let link = document.createElement('a');
+                link.download = currentAutomaton.automatonName + '.png';
+                link.href = img;
+                link.click();
+            });
+        } else {
+            setToastModal({ message: 'Please add an Automaton on Canvas to Save the Image!', show: true });
         }
     }
-    
-    const patchAutomaton = () => {
-        deleteAutomaton(currentAutomaton);
-        saveAutomaton();
+
+    const saveAutomaton = () => {
+        if (isAuthenticated) {
+            let { network } = canvas;
+            let nodes = network.body.data.nodes.get();
+            let edges = network.body.data.edges.get();
+
+            if (nodes.length !== 0 && edges.length !== 0) {
+                console.log(currentAutomaton);
+                if (state.automatons.find(automaton => automaton._id === currentAutomaton)) {
+                    deleteAutomaton(currentAutomaton);
+                }
+
+                const newAutomaton =
+                {
+                    userID: user?.email,
+                    newAutomaton:
+                    {
+                        automatonName: 'prueba acc',
+                        nodes: nodes,
+                        edges: edges
+                    }
+                }
+
+                addAutomaton(newAutomaton);
+                network.body.data.nodes.clear();
+                network.body.data.edges.clear();
+                setToastModal({ message: 'Automaton Stored Correctly!!', show: true });
+            } else {
+                setToastModal({ message: 'Please create or display an Automaton to save on the database!', show: true });
+            }
+        } else {
+            setToastModal({ message: 'Please login to save the Automaton!', show: true });
+        }
     }
 
     const [state, dispatch] = useReducer(appReducer, initialState)
@@ -106,7 +122,7 @@ const GlobalProvider = ({ ...props }) => {
 
     const updateAutomaton = async () => {
         try {
-            const { data } = await api.updateAutomaton(user?.email); // ARREGLAR
+            const { data } = await api.updateAutomaton(user?.email);
 
             dispatch({ type: UPDATE, payload: data })
         } catch (error) {
@@ -149,14 +165,13 @@ const GlobalProvider = ({ ...props }) => {
         addAutomaton,
         updateAutomaton,
         deleteAutomaton,
-
         mode,
         setMode,
         saveAutomaton,
-        patchAutomaton,
         toastModal,
         setToastModal,
-        path, setPath,
+        path,
+        setPath,
     }
 
     return <GlobalContext.Provider {...props} value={value} />;

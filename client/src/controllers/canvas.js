@@ -48,18 +48,20 @@ export const newTransitionHandler = (network) => network.addEdgeMode();
  * @param {*} network 
  */
 export function setStartHandler(network) {
-
     let selectedNodeId = network.getSelectedNodes().at(0);
-    let node = network.body.data.nodes.get(selectedNodeId);
 
-    if (node.start) removeStartState(network);
-    else {
-        removeStartState(network);
-        node.start = true;
+    if (selectedNodeId) {
+        let node = network.body.data.nodes.get(selectedNodeId);
+
+        if (node.start) removeStartState(network);
+        else {
+            removeStartState(network);
+            node.start = true;
+        }
+
+        node = updateColorForStartAndFinal([node]);
+        network.body.data.nodes.update(node);
     }
-
-    node = updateColorForStartAndFinal([node]);
-    network.body.data.nodes.update(node);
 }
 /**
  * Sets or unsets the selected nodes as 'Start Node'
@@ -147,13 +149,13 @@ export function runAnimation(network, nodes = null, animationTime = 1000, animat
             currentState.color = animationColor;
             network.body.data.nodes.update(currentState);
 
-            console.log("Nodo: ", i);
+            /* console.log("Nodo: ", i); */
 
             await delay(animationTime);
             //Set animation color
             lastColor ? currentState.color = lastColor : currentState.color = defaultColor;
             network.body.data.nodes.update(currentState);
-            
+
         }
     };
 

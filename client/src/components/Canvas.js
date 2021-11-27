@@ -39,18 +39,14 @@ export const Canvas = () => {
             },
             smooth: {
                 type: "curvedCCW",
+            },
+            color: {
+                inherit: false,
             }
         },
         interaction: {
             multiselect: true,
             selectConnectedEdges: false
-        },
-        physics: {
-            enabled: false,     // Stops node movement during display
-            stabilization: {    // Determines an initial layout; enabled by default
-                enabled: true,
-                iterations: 1000
-            }
         },
         manipulation: {
             enabled: false,
@@ -90,6 +86,7 @@ export const Canvas = () => {
     useEffect(() => {
         network.current = new Network(domNode.current, data, options);
         setCanvas({ network: network.current });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
