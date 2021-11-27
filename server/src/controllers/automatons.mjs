@@ -86,15 +86,18 @@ export const updateAutomaton = (req, res) => {
 
 /* ====================================DELETE==================================== */
 //https://docs.mongodb.com/manual/reference/operator/update/pull/
-export const deleteAutomaton = (req, res) => {
-    const { userID, autName } = req.params;
+export const deleteAutomaton = async (req, res) => {
+    const { userID, autId } = req.params;
 
-    automatonModel
-        .findOneAndUpdate(
-            { userID: userID, "dfa.automatonName": autName },
-            { $pull: { dfa: { automatonName : { $get : autName } } } },
-            { multi: true }
-        )
-        .then(() => res.json({ message: "Automaton deleted successfully!" }))
-        .catch((error) => res.status(404).json({ message: error.message }))
+    try {
+        await automatonModel.findOneAndUpdate(
+            { userID: userID },
+            { $pull: { dfa: { _id: autId } } },
+            { safe: true, multi: false }
+        );
+
+        res.status(200).json(autId);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
 }

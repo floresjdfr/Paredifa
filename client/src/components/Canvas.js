@@ -4,8 +4,6 @@ import { useEffect, useRef } from 'react';
 import { addNode, addEdgeAction, deleteEdgeAction, randomColor, getNewNodeID, getNewEdgeID } from '../controllers/canvas'
 import './Canvas.css';
 
-
-
 const nodes = new DataSet([]);
 
 const edges = new DataSet([]);
@@ -15,10 +13,9 @@ const data = {
     edges
 };
 
-
 export const Canvas = () => {
 
-    const { canvas, setCanvas, setEditTransitionModalShow, automatonName } = useGlobalContext();
+    const { canvas, setCanvas, setEditTransitionModalShow, currentAutomaton } = useGlobalContext();
 
     const domNode = useRef(null);
     const network = useRef(null);

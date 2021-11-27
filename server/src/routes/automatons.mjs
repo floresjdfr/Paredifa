@@ -8,7 +8,7 @@ router.post("/automatons", addAutomaton);
 router.get("/automatons/:userID", readAutomatons);
 router.get("/automatons/:userID/:autName", readAutomaton);
 router.patch("/automatons/:userID/:autName", updateAutomaton);
-router.delete("/automatons/:userID/:autName", deleteAutomaton);
+router.delete("/automatons/:userID/:autId", deleteAutomaton);
 
 router.get("/automatons", getAutomatons); //-----------REQUEST DE PRUEBA
 

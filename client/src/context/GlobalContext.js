@@ -1,6 +1,6 @@
 import React, { createContext, useState, useReducer } from 'react';
 import html2canvas from 'html2canvas';
-import { FETCH_ABOUTUS, CREATE, FETCH_AUTOMATONS, UPDATE, DELETE  } from "../constants/actionTypes";
+import { FETCH_ABOUTUS, CREATE, FETCH_AUTOMATONS, UPDATE, DELETE } from "../constants/actionTypes";
 
 import appReducer from './AppReducer';
 
@@ -25,17 +25,18 @@ const GlobalProvider = ({ ...props }) => {
 
     const [canvas, setCanvas] = useState({ graph: {} });
 
-    const [userName, setUserName] = useState('');
-    const [automatonName, setAutomatonName] = useState('');
+    const [currentAutomaton, setCurrentAutomaton] = useState({ nodes: [], edges: [] });
 
-    const[editTransitionModalShow, setEditTransitionModalShow] = useState(false);
+    const [editTransitionModalShow, setEditTransitionModalShow] = useState(false);
+
+    const [mode, setMode] = useState('DFA');
 
     // https://www.npmjs.com/package/html2canvas
     const saveCanvasPNG = e => {
         html2canvas(document.querySelector("#canvas")).then(canvas => {
             let img = canvas.toDataURL("image/png");
             let link = document.createElement('a');
-            link.download = automatonName + '.png';
+            link.download = currentAutomaton.automatonName + '.png';
             link.href = img;
             link.click();
         });
@@ -77,23 +78,23 @@ const GlobalProvider = ({ ...props }) => {
     const updateAutomaton = async () => {
         try {
             const { data } = await api.updateAutomaton(); // ARREGLAR
-            
+
             dispatch({ type: UPDATE, payload: data })
         } catch (error) {
             console.log(error.message);
         }
     }
 
-    const deleteAutomaton = async () => {
+    const deleteAutomaton = async (autId) => {
         try {
-            const { data } = await api.deleteAutomaton(); // ARREGLAR
-            
+            const { data } = await api.deleteAutomaton(user?.email, autId);
+
             dispatch({ type: DELETE, payload: data })
         } catch (error) {
             console.log(error.message);
         }
     }
-    
+
     const value = {
         dfaModalShow,
         setDfaModalShow,
@@ -103,17 +104,15 @@ const GlobalProvider = ({ ...props }) => {
         setAboutModalShow,
         instructionsModalShow,
         setInstructionsModalShow,
-        editTransitionModalShow, 
+        editTransitionModalShow,
         setEditTransitionModalShow,
         saveCanvasPNG,
         errorsModalShow,
         setErrorsModalShow,
         canvas,
         setCanvas,
-        userName,
-        setUserName,
-        automatonName,
-        setAutomatonName,
+        currentAutomaton,
+        setCurrentAutomaton,
         automatons: state.automatons,
         aboutUs: state.aboutUs,
         readAboutUs,
@@ -121,6 +120,9 @@ const GlobalProvider = ({ ...props }) => {
         addAutomaton,
         updateAutomaton,
         deleteAutomaton,
+
+        mode,
+        setMode,
     }
 
     return <GlobalContext.Provider {...props} value={value} />;

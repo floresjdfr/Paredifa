@@ -6,9 +6,9 @@ POST http://localhost:3001/api/automatons HTTP/1.1
 Content-Type: application/json
 
 {
-    "userID": "116830152",
+    "userID": "marvin.ag00@gmail.com",
     "newAutomaton": {
-            "automatonName": "Automata Prueba 1",
+            "automatonName": "Automata Prueba C",
             "nodes": [
                 {
                     "id": 1,
@@ -137,7 +137,7 @@ Content-Type: application/json
 
 
 ### deleteAutomaton
-DELETE  http://localhost:3001/api/automatons/116830153/Automata update HTTP/1.1
+DELETE  http://localhost:3001/api/automatons/marvin.ag00@gmail.com/61a14f3c792bb1201d76e0d7 HTTP/1.1
 
 
 #############################################################################

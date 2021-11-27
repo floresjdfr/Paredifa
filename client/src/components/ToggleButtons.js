@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { ButtonGroup, ToggleButton } from "react-bootstrap";
+import useGlobalContext from '../hooks/useGlobalContext';
 
 export const ToggleButtons = () => {
-    const [radioValue, setRadioValue] = useState('1');
+    const { mode, setMode } = useGlobalContext();
 
     const radios = [
-        { name: 'DFA', value: '1' },
-        { name: 'RE', value: '2' },
+        { name: 'DFA', value: 'DFA' },
+        { name: 'RE', value: 'RE' },
     ];
 
     return (
@@ -16,11 +17,11 @@ export const ToggleButtons = () => {
                     key={index}
                     id={`radio-${index}`}
                     type="radio"
-                    variant={radioValue === radio.value ? 'outline-success' : 'outline-secondary'}
+                    variant={mode === radio.value ? 'outline-success' : 'outline-secondary'}
                     name="radio"
                     value={radio.value}
-                    checked={radioValue === radio.value}
-                    onChange={(e) => setRadioValue(e.currentTarget.value)}
+                    checked={mode === radio.value}
+                    onChange={(e) => setMode(e.currentTarget.value)}
                 >
                     {radio.name}
                 </ToggleButton>
