@@ -33,6 +33,7 @@ export const Main = () => {
         canvas,
         mode,
         saveAutomaton,
+        patchAutomaton,
     } = useGlobalContext();
 
     const handleDfaModalOpen = () => {
@@ -49,6 +50,15 @@ export const Main = () => {
 
     const handleSaveAutomaton = () => {
         saveAutomaton();
+    }
+
+    const handlePatchAutomaton = () => {
+        patchAutomaton();
+
+        let { network } = canvas;
+
+        network.body.data.nodes.clear();
+        network.body.data.edges.clear();
     }
 
     const [process, setProcess] = useState({
@@ -152,7 +162,7 @@ export const Main = () => {
             <div className="d-flex flex-row flex-wrap mb-3">
                 <div className="me-auto">
                     <Button variant="dark" className="buttons dark-button" onClick={handleConfirmModalOpen}><i className="material-icons">border_clear</i> Clear Canvas</Button>
-                    <Button variant="dark" className="buttons dark-button" onClick={() => console.log('update')}><i className="material-icons">update</i> Update Automaton</Button>
+                    <Button variant="dark" className="buttons dark-button" onClick={handlePatchAutomaton}><i className="material-icons">update</i> Update Automaton</Button>
                 </div>
 
                 <div>

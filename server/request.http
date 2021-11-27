@@ -85,7 +85,7 @@ Content-Type: application/json
 
 {
     "updateAutomaton": {
-            "automatonName": "Automata update aaa",
+            "automatonName": "Automata updatea",
             "nodes": [
                 {
                     "id": 1,

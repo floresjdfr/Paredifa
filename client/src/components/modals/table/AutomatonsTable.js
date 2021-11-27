@@ -18,7 +18,7 @@ export const AutomatonsTable = () => {
     const handleDisplayAutomaton = (id) => {
         let automaton = automatons.find(automaton => automaton._id === id);
 
-        setCurrentAutomaton(automaton);
+        setCurrentAutomaton(id);
 
         let { nodes, edges } = automaton;
 

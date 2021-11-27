@@ -25,7 +25,7 @@ const GlobalProvider = ({ ...props }) => {
 
     const [canvas, setCanvas] = useState({ graph: {} });
 
-    const [currentAutomaton, setCurrentAutomaton] = useState({ nodes: [], edges: [] });
+    const [currentAutomaton, setCurrentAutomaton] = useState('');
 
     const [editTransitionModalShow, setEditTransitionModalShow] = useState(false);
 
@@ -55,7 +55,7 @@ const GlobalProvider = ({ ...props }) => {
                 userID: user?.email,
                 newAutomaton:
                 {
-                    automatonName: 'prueba add',
+                    automatonName: 'prueba acc',
                     nodes: nodes,
                     edges: edges
                 }
@@ -64,6 +64,11 @@ const GlobalProvider = ({ ...props }) => {
             addAutomaton(newAutomaton);
             setToastModal({ message: 'Automaton Stored Correctly!!', show: true });
         }
+    }
+    
+    const patchAutomaton = () => {
+        deleteAutomaton(currentAutomaton);
+        saveAutomaton();
     }
 
     const [state, dispatch] = useReducer(appReducer, initialState)
@@ -90,7 +95,7 @@ const GlobalProvider = ({ ...props }) => {
 
     const addAutomaton = async (newAutomaton) => {
         try {
-            const { data } = await api.addAutomaton(newAutomaton); // ARREGLAR
+            const { data } = await api.addAutomaton(newAutomaton);
 
             dispatch({ type: CREATE, payload: data })
         } catch (error) {
@@ -100,7 +105,7 @@ const GlobalProvider = ({ ...props }) => {
 
     const updateAutomaton = async () => {
         try {
-            const { data } = await api.updateAutomaton(); // ARREGLAR
+            const { data } = await api.updateAutomaton(user?.email); // ARREGLAR
 
             dispatch({ type: UPDATE, payload: data })
         } catch (error) {
@@ -147,6 +152,7 @@ const GlobalProvider = ({ ...props }) => {
         mode,
         setMode,
         saveAutomaton,
+        patchAutomaton,
         toastModal,
         setToastModal,
     }

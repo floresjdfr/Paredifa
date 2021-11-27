@@ -74,8 +74,6 @@ export const updateAutomaton = (req, res) => {
     const { userID, autId } = req.params;
     const { updateAutomaton } = req.body;
 
-    console.log(autId)
-
     automatonModel
         .findOneAndUpdate(
             { userID: userID, "dfa._id": autId },
