@@ -17,7 +17,9 @@ const automatonSchema = mongoose.Schema(
                 edges: [
                     {
                         label: String,
+                        labelList: [{label : String}],
                         from: Number,
+                        arrows: String,
                         to: Number,
                     },
                 ],

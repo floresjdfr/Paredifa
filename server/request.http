@@ -33,31 +33,37 @@ Content-Type: application/json
                 {
                     "label": "0",
                     "from": 1,
+                    "arrows": "to",
                     "to": 1
                 },
                 {
                     "label": "1",
                     "from": 1,
+                    "arrows": "to",
                     "to": 2
                 },
                 {
                     "label": "1",
                     "from": 2,
+                    "arrows": "to",
                     "to": 1
                 },
                 {
                     "label": "0",
                     "from": 2,
+                    "arrows": "to",
                     "to": 3
                 },
                 {
                     "label": "0",
                     "from": 3,
+                    "arrows": "to",
                     "to": 2
                 },
                 {
                     "label": "1",
                     "from": 3,
+                    "arrows": "to",
                     "to": 3
                 }
             ]

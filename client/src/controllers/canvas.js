@@ -1,3 +1,9 @@
+
+
+/**
+ * Generates a random color
+ * @returns '#color'
+ */
 export function randomColor() {
     const red = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
     const green = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
@@ -5,78 +11,109 @@ export function randomColor() {
     return `#${red}${green}${blue}`;
 }
 
-export function getNewNodeID(network) {
-    return network.body.data.nodes.length > 0 ? network.body.data.nodes.getIds().at(-1) + 1 : 1;
-}
+/**
+ * Returns a new ID taking the last node ID added
+ * @param {*} network Whole network object
+ * @returns new Node ID
+ */
+export const getNewNodeID = (network) => { return network.body.data.nodes.length > 0 ? network.body.data.nodes.getIds().at(-1) + 1 : 1; }
 
-export function getNewEdgeID(network) {
-    return network.body.data.edges.length > 0 ? network.body.data.edges.getIds().at(-1) + 1 : 1;
-}
+/**
+ * Returns a new ID taking the last edge ID added
+ * @param {*} network Whole network object
+ * @returns new Edge ID
+ */
+export const getNewEdgeID = (network) => { return network.body.data.edges.length > 0 ? network.body.data.edges.getIds().at(-1) + 1 : 1; }
 
-export function deleteHandler(network) {
-    network.deleteSelected();
-}
+/**
+ * Deletes selected object
+ * @param {*} network Whole network object
+ */
+export const deleteHandler = (network) => network.deleteSelected();
 
-export function newStateHandler(network) {
-    network.addNodeMode({ color: 1 });
-}
+/**
+ * Activates 'adding node mode' in the canvas
+ * @param {*} network Whole network object
+ */
+export const newStateHandler = (network) => network.addNodeMode();
 
-export function newTransitionHandler(network) {
-    network.addEdgeMode();
-}
+/**
+ * Activates 'adding edge mode' in the canvas
+ * @param {*} network Whole network object
+ */
+export const newTransitionHandler = (network) => network.addEdgeMode();
 
+/**
+ * Sets or unsets the first selected node as 'Start Node'
+ * @param {*} network 
+ */
 export function setStartHandler(network) {
+
     let selectedNodeId = network.getSelectedNodes().at(0);
-    if (selectedNodeId) {
-        let node = network.body.data.nodes.get(selectedNodeId);
-        if (node) {
-            node.start = true;
-            node.final = false;
+    let node = network.body.data.nodes.get(selectedNodeId);
+
+    if(node.start) removeStartState(network);
+    else {
+        removeStartState(network);
+        node.start = true;
+    }
+
+    node = updateColorForStartAndFinal([node]);
+    network.body.data.nodes.update(node);
+}
+
+/**
+ * Sets or unsets the selected nodes as 'Start Node'
+ * @param {*} network 
+ */
+export function setFinalHandler(network) {
+
+    let selectedNodesIds = network.getSelectedNodes();
+    if (selectedNodesIds.length > 0) {
+        let nodes = selectedNodesIds.map(node => network.body.data.nodes.get(node));
+        if (nodes.length > 0) {
+
+            nodes = nodes.map(node => {
+                (node.final) ? node.final = false : node.final = true;
+                return node;
+            });
+            nodes = updateColorForStartAndFinal(nodes);
+            nodes.forEach(node => network.body.data.nodes.update(node));
         }
     }
 }
 
-const updateColorForStartAndFinal = (nodes, startColor = '#69995D', finalColor = '#9B2915') => {
-    return nodes.map(node => {
-        return node.start
-            ? { color: startColor, ...node }
-            : node.final
-                ? { color: finalColor, ...node }
-                : { ...node };
-    })
-}
 
-
-export function addNode(setCanvas, network) {
-    let color = randomColor();
-
-    //Creates a new ID adding 1 to the last ID
-    let newID = network.body.data.nodes.length > 0 ? network.body.data.nodes.getIds().at(-1) + 1 : 1;
-    network.body.data.nodes.add({ id: newID, label: `S${newID}`, color });
-    setCanvas({ network })
-}
-
-export function addEdgeAction(setCanvas, network) {
-    let selectedNodes = network.getSelectedNodes();
-    let lastNodeId = network.body.data.edges.length > 0 ? network.body.data.edges.getIds().at(-1) : 0;
-    if (selectedNodes.length > 1) {
-        selectedNodes.forEach((nodeID, i) => {
-            i !== 0 && network.body.data.edges.add({ id: ++lastNodeId, from: selectedNodes[0], to: nodeID, arrows: "to" });
-        });
-    } else {
-        network.body.data.edges.add({ id: ++lastNodeId, from: selectedNodes[0], to: selectedNodes[0], arrows: "to" });
+/**
+ * Checks if there's a 'start' node in the network and changes that 'start state' to 'normal state'
+ * @param {*} network 
+ */
+function removeStartState(network) {
+    if (network.body.data.nodes.length > 0) {
+        let startNode = network.body.data.nodes.get({ filter: function (item) { return item.start === true } });
+        if (startNode.length > 0) {
+            startNode[0].start = false;
+            updateColorForStartAndFinal([startNode[0]]);
+            network.body.data.nodes.update(startNode);
+        }
     }
-    setCanvas({ network });
 }
 
-export function deleteEdgeAction(setCanvas, network) {
-    let selectedNodes = network.getSelectedNodes();
-    let selectedEdges = network.getSelectedEdges();
-    selectedNodes.forEach(nodeId => {
-        network.body.data.nodes.remove(nodeId);
-    })
-    selectedEdges.forEach(edgeId => {
-        network.body.data.edges.remove(edgeId);
-    })
-    setCanvas({ network });
+/**
+ * Changes the color of the nodes if they are 'start' or 'final' states
+ * @param {*} nodes 
+ * @param {*} defaultColor 
+ * @param {*} startColor 
+ * @param {*} finalColor 
+ * @returns 
+ */
+export const updateColorForStartAndFinal = (nodes, defaultColor = '#F18F01', startColor = '#69995D', finalColor = '#9D96B8') => {
+    let result = nodes.map(node => {
+        if (node.start && !node.final) node.color = startColor;
+        else if (node.start && node.final) node.color = '#886176';//Cambiar en caso que sea ambos
+        else if (!node.start && node.final) node.color = finalColor;
+        else node.color = defaultColor;
+        return node;
+    });
+    return result;
 }
