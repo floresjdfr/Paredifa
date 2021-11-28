@@ -34,6 +34,8 @@ const GlobalProvider = ({ ...props }) => {
 
     const [toastModal, setToastModal] = useState({ message: '', show: false });
 
+    const [errors, setErrors] = useState([]);
+
     // https://www.npmjs.com/package/html2canvas
     const saveCanvasPNG = e => {
         let { network } = canvas;
@@ -60,7 +62,6 @@ const GlobalProvider = ({ ...props }) => {
             let edges = network.body.data.edges.get();
 
             if (nodes.length !== 0 && edges.length !== 0) {
-                console.log(currentAutomaton);
                 if (state.automatons.find(automaton => automaton._id === currentAutomaton)) {
                     deleteAutomaton(currentAutomaton);
                 }
@@ -172,6 +173,8 @@ const GlobalProvider = ({ ...props }) => {
         setToastModal,
         path,
         setPath,
+        errors,
+        setErrors,
     }
 
     return <GlobalContext.Provider {...props} value={value} />;

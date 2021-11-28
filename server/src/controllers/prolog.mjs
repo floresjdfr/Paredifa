@@ -1,18 +1,6 @@
 
 import axios from 'axios';
 
-/* export const run = async (req, res) => {
-    let auxJson = prepareRequest(req.body);
-    axios.post("http://localhost:9000/run", auxJson)
-        .then(response => {
-            const aux = response.data;
-            res.json(aux);
-            console.log(aux);
-            // console.log(res);
-            // console.log(response);
-        });
-} */
-
 export const run = async (req, res) => {
     let auxJson = prepareRequest(req.body);
 
