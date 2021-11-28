@@ -194,3 +194,9 @@ export const requestRun = async (path, network) => {
     let { data } = await api.run(body);
     return data;
 };
+
+export const isCanvasEmpty = (network) => {
+    let nodes = network.body.data.nodes.get();
+    let edges = network.body.data.edges.get();
+    return nodes.length == 0 && edges.length == 0;
+}

@@ -3,7 +3,7 @@ import { ButtonGroup, ToggleButton } from "react-bootstrap";
 import useGlobalContext from '../hooks/useGlobalContext';
 
 export const ToggleButtons = () => {
-    const { mode, setMode } = useGlobalContext();
+    const { mode, setMode, setPath, setVocabularyTemp } = useGlobalContext();
 
     const radios = [
         { name: 'DFA', value: 'DFA' },
@@ -21,7 +21,11 @@ export const ToggleButtons = () => {
                     name="radio"
                     value={radio.value}
                     checked={mode === radio.value}
-                    onChange={(e) => setMode(e.currentTarget.value)}
+                    onChange={(e) => {
+                        setMode(e.currentTarget.value)
+                        setVocabularyTemp('');
+                        setPath('');
+                    }}
                 >
                     {radio.name}
                 </ToggleButton>

@@ -1,3 +1,7 @@
+
+
+
+
 export const allowTypeTransition = (vocabularyList = [], key = '', typedString = '') => {
     if (typedString === '' && !vocabularyList.includes(key)) return false;
     if (typedString === '' || key === null) return true;
@@ -22,25 +26,31 @@ export const isVocabularyRegex = (vocabulary = [], setToastModal) => {
     }
 }
 
-export const hasStartState = (network) => {
+export const hasStartState = (network, errors, setErrors) => {
     let hasStartState = false;
-    network.body.data.nodes.forEach(node => {
+    network.body.data.nodes.get().forEach(node => {
         if (node.start) { hasStartState = true; }
     });
-    return hasStartState;
+    if (!hasStartState){
+        let aux = errors;
+        if(aux.length == 0)
+            setErrors("The automaton doesn't have start state");
+        else 
+            setErrors(...aux, "The automaton doesn't have start state");
+    }
 }
 
 export const hasFinalState = (network) => {
     let hasStartState = false;
-    network.body.data.nodes.forEach(node => {
+    network.body.data.nodes.get().forEach(node => {
         if (node.final) { hasStartState = true; }
     });
     return hasStartState;
 }
 
 export const missingTransitions = (network, vocabularyArray = []) => {
-    const nodes = network.body.data.nodes;
-    const edges = network.body.data.edges;
+    const nodes = network.body.data.nodes.get();
+    const edges = network.body.data.edges.get();
 
     let missingTransisitionsArray = [];
 

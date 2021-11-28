@@ -29,8 +29,7 @@ mime:mime_extension('mjs', 'application/javascript').
 server(Port) :-                                            
         http_server(http_dispatch, [port(Port)]).
        
-compile(Request) :-     
-    reset_gensym,                                   
+compile(Request) :-                                 
    http_read_json_dict(Request, DictIn),
    _{
        re : Re
@@ -42,6 +41,7 @@ compile(Request) :-
    nfa_to_dfa(FA,DFA),
    fa_to_json(DFA,Json),
    DictOut = DictIn.put(Json),
+   format(user_output,"Response: ~q~n",[Json]),
    reply_json_dict(DictOut)
 .
 

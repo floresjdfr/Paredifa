@@ -3,6 +3,7 @@ import { DataSet, Network } from 'vis-network/standalone/esm/vis-network'
 import { useEffect, useRef } from 'react';
 import { getNewNodeID, getNewEdgeID } from '../controllers/canvas'
 import './Canvas.css';
+import { hasFinalState, hasStartState } from '../controllers/validations';
 
 const nodes = new DataSet([]);
 
@@ -16,6 +17,7 @@ const data = {
 export const Canvas = () => {
 
     const { setCanvas, setEditTransitionModalShow, errors, setErrors } = useGlobalContext();
+    
 
     const domNode = useRef(null);
     const network = useRef(null);
@@ -59,7 +61,7 @@ export const Canvas = () => {
                 delete data.x;
                 delete data.y;
                 network.current.body.data.nodes.update(data);
-
+                
             },
             addEdge: async function (data, callback) {
                 let id = getNewEdgeID(network.current);

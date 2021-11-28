@@ -12,13 +12,13 @@ export const ErrorsModal = () => {
     return (
         <Offcanvas show={errorsModalShow} onHide={handleClose} placement={"end"} scroll backdrop={false}>
             <Offcanvas.Header closeButton className="border-bottom border-2 border-secondary">
-                <Offcanvas.Title className="text-danger" >Errors</Offcanvas.Title>
+                <Offcanvas.Title className="text-info" >Information</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
                 {
                     errors.length !== 0 ?
                         errors.map((error, index) => (
-                            <p key={index}>{index}: {error}</p>
+                            <p key={index}>{index+1}: {error}</p>
                         )) :
                         <p> There are no problems, automaton is OK!</p>
                 }

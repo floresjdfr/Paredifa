@@ -4,7 +4,7 @@ import { Canvas } from "./Canvas";
 import useGlobalContext from '../hooks/useGlobalContext';
 
 import './Main.css';
-import { deleteHandler, newStateHandler, newTransitionHandler, setFinalHandler, setStartHandler, runAnimation, requestRun, updateColorForStartAndFinal } from '../controllers/canvas';
+import { deleteHandler, newStateHandler, newTransitionHandler, setFinalHandler, setStartHandler, runAnimation, requestRun, updateColorForStartAndFinal, isCanvasEmpty } from '../controllers/canvas';
 import { ToastModal } from './modals/ToastModal';
 import { compileRegex, split } from '../controllers/main';
 import { allowTypeVocabulary } from '../controllers/validations';
@@ -60,54 +60,73 @@ export const Main = () => {
         event.preventDefault();
 
         if (mode == "DFA") {
-            let list = split(vocabularyTemp);
-            setVocabularyArray(list);
-            console.log("Vocabulary set: ", list);
+            if (vocabularyTemp !== "") {
+                let list = split(vocabularyTemp);
+                setVocabularyArray(list);
+                console.log("Vocabulary set: ", list);
+            }
         }
         else {
             try {
-                let {data} = await compileRegex(vocabularyTemp);
-                canvas.network.body.data.nodes.add(data.nodes);
-                canvas.network.body.data.edges.add(data.edges);
-                let newNodes = updateColorForStartAndFinal(canvas.network.body.data.nodes)
-                canvas.network.body.data.nodes.update(newNodes);
+                if (isCanvasEmpty(canvas.network)) {
+                    let re = vocabularyTemp.replaceAll(" ", "");
+                    let { data } = await compileRegex(re);
+                    canvas.network.body.data.nodes.add(data.nodes);
+                    canvas.network.body.data.edges.add(data.edges);
+                    let newNodes = updateColorForStartAndFinal(canvas.network.body.data.nodes)
+                    canvas.network.body.data.nodes.update(newNodes);
+                }
+                else setConfirmModalShow(true);
+
             }
-            catch(error){
+            catch (error) {
                 setToastModal({ message: 'An error ocurred while compiling the Regular Expression', show: true });
             }
-            
+
         }
 
     }
-
     const handleRun = async () => {
-        let nodes = canvas.network.body.data.nodes.get();
-        let edges = canvas.network.body.data.edges.get();
+        try {
+            let nodes = canvas.network.body.data.nodes.get();
+            let edges = canvas.network.body.data.edges.get();
 
-        if (nodes.length !== 0 && edges.length !== 0) {
-            setProcess({
-                label: 'Running',
-                isRunning: true
-            })
-
-            const data = await requestRun(path, canvas.network);
-            const pathList = data.path;
-            const result = data.result;
-            if (result) {
-                runAnimation(canvas.network, pathList);
+            if (nodes.length !== 0 && edges.length !== 0) {
+                setProcess({
+                    label: 'Running',
+                    isRunning: true
+                })
+                const data = await requestRun(path, canvas.network);
+                const pathList = data.path;
+                const result = data.result;
+                if (result) {
+                    setErrors([`Path accepted: '${path}'`]);
+                    setErrorsModalShow(true);
+                    runAnimation(canvas.network, pathList);
+                }
+                else{
+                    setErrors([`Path not accepted: '${path}'`]);
+                    setErrorsModalShow(true);
+                }
+                setProcess({
+                    label: "Run",
+                    isRunning: false
+                })
             }
-            setProcess({
-                label: "Run",
-                isRunning: false
-            })
-
-        } else {
-            setToastModal({ message: 'Please create or display an Automaton to run it!', show: true });
+            else if (mode == "DFA") {
+                setToastModal({ message: 'Please create or display an Automaton to run it!', show: true });
+            }
+            else {
+                setToastModal({ message: 'Please type a path to execute!', show: true });
+            }
+        }
+        catch (error) {
+            setToastModal({ message: 'An error ocurred while compiling the Regular Expression', show: true });
         }
     }
 
     /* const [step, setStep] = useState(true);
-
+    
     const handleRunBySteps = () => {
         setStep(!step);
     } */
@@ -120,7 +139,7 @@ export const Main = () => {
                     <Form onSubmit={onSubmitVocabularyRegex}>
                         <Form.Group as={Row} className="mb-3" controlId=" ">
                             <Col md="auto">
-                                <Form.Control type="text" onChange={onChangeVocabularyRegex} placeholder={mode === 'DFA' ? 'Vocabulary' : 'Regex'} className="mt-2" />
+                                <Form.Control type="text" value={vocabularyTemp} onChange={onChangeVocabularyRegex} placeholder={mode === 'DFA' ? 'Vocabulary' : 'Regex'} className="mt-2" />
                             </Col>
                             <Col md="auto">
                                 <Button
@@ -196,7 +215,7 @@ export const Main = () => {
                     <Button variant="outline-light" className="buttons" onClick={handleConfirmModalOpen}><i className="material-icons">border_clear</i> Clear Canvas</Button>
                 </div>
                 <div>
-                    <Button variant="danger" className="buttons" onClick={handleErrorsModalOpen}><i className="material-icons">error</i> Show Errors</Button>
+                    <Button variant="secondary" className="buttons" onClick={handleErrorsModalOpen}><i className="material-icons">error</i> Information</Button>
                 </div>
             </div>
 

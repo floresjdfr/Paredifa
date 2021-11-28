@@ -39,6 +39,7 @@ const GlobalProvider = ({ ...props }) => {
     const [toastModal, setToastModal] = useState({ message: '', show: false });
 
     const [errors, setErrors] = useState([]);
+    
 
     // https://www.npmjs.com/package/html2canvas
     const saveCanvasPNG = e => {
@@ -139,9 +140,10 @@ const GlobalProvider = ({ ...props }) => {
         try {
             const { data } = await api.deleteAutomaton(user?.email, autId);
 
+            console.log("eliminar", data);
             dispatch({ type: DELETE, payload: data })
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
         }
     }
 

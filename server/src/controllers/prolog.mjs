@@ -18,7 +18,7 @@ export const run = async (req, res) => {
 export const compile = async (req, res) => {
     await axios.post("http://localhost:9000/compile", req.body)
         .then((response) => {
-            // console.log(response.data);
+            
             let data = parsePrologJson(response.data);
             console.log(data);
             res.status(200).json(data);
