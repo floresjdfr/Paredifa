@@ -1,9 +1,16 @@
+/*
+  Grupo: 02
+        ID: 402330997 - Rolando Herrera Bustos - 10am
+        ID: 116830152 - Marvin Aguilar Fuentes - 10am
+        ID: 116880486 - Alonso Calderón Trigueros - 10am
+        ID: 402390142 - José David Flores Rodríguez - 10am
+*/
+
 import useGlobalContext from '../hooks/useGlobalContext';
 import { DataSet, Network } from 'vis-network/standalone/esm/vis-network'
 import { useEffect, useRef } from 'react';
 import { getNewNodeID, getNewEdgeID } from '../controllers/canvas'
 import './Canvas.css';
-import { hasFinalState, hasStartState } from '../controllers/validations';
 
 const nodes = new DataSet([]);
 
@@ -16,7 +23,7 @@ const data = {
 
 export const Canvas = () => {
 
-    const { setCanvas, setEditTransitionModalShow, errors, setErrors } = useGlobalContext();
+    const { setCanvas, setEditTransitionModalShow } = useGlobalContext();
     
 
     const domNode = useRef(null);

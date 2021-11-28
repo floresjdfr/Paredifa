@@ -1,18 +1,22 @@
-
-
-
+/*
+  Grupo: 02
+        ID: 402330997 - Rolando Herrera Bustos - 10am
+        ID: 116830152 - Marvin Aguilar Fuentes - 10am
+        ID: 116880486 - Alonso Calderón Trigueros - 10am
+        ID: 402390142 - José David Flores Rodríguez - 10am
+*/
 
 export const allowTypeTransition = (vocabularyList = [], key = '', typedString = '') => {
     if (typedString === '' && !vocabularyList.includes(key)) return false;
     if (typedString === '' || key === null) return true;
-    if (key != ',' && !isCommaBefore(typedString)) return false;
+    if (key !== ',' && !isCommaBefore(typedString)) return false;
     if (vocabularyList.includes(key) || allowComma(typedString)) {
         return true;
     }
     return false;
 }
 
-const allowComma = (typeString) => { return typeString.slice(-1) != ","; }
+const allowComma = (typeString) => { return typeString.slice(-1) !== ","; }
 
 const isCommaBefore = (typeString) => { return typeString.slice(-1) === ","; }
 
@@ -33,7 +37,7 @@ export const hasStartState = (network, errors, setErrors) => {
     });
     if (!hasStartState){
         let aux = errors;
-        if(aux.length == 0)
+        if(aux.length === 0)
             setErrors("The automaton doesn't have start state");
         else 
             setErrors(...aux, "The automaton doesn't have start state");

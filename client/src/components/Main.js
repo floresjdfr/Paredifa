@@ -1,3 +1,11 @@
+/*
+  Grupo: 02
+        ID: 402330997 - Rolando Herrera Bustos - 10am
+        ID: 116830152 - Marvin Aguilar Fuentes - 10am
+        ID: 116880486 - Alonso Calderón Trigueros - 10am
+        ID: 402390142 - José David Flores Rodríguez - 10am
+*/
+
 import { useState } from 'react';
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import { Canvas } from "./Canvas";
@@ -7,7 +15,6 @@ import './Main.css';
 import { deleteHandler, newStateHandler, newTransitionHandler, setFinalHandler, setStartHandler, runAnimation, requestRun, updateColorForStartAndFinal, isCanvasEmpty } from '../controllers/canvas';
 import { ToastModal } from './modals/ToastModal';
 import { compileRegex, split } from '../controllers/main';
-import { allowTypeVocabulary } from '../controllers/validations';
 
 
 export const Main = () => {
@@ -18,7 +25,6 @@ export const Main = () => {
         saveCanvasPNG,
         canvas,
         mode,
-        saveAutomaton,
         path,
         setPath,
         setToastModal,
@@ -26,7 +32,8 @@ export const Main = () => {
         setVocabularyTemp,
         vocabularyArray,
         setVocabularyArray,
-        errors, setErrors
+        setErrors,
+        setDfaNameModalShow,
     } = useGlobalContext();
 
     const onChangePath = e => setPath(e.target.value);
@@ -44,7 +51,7 @@ export const Main = () => {
     }
 
     const handleSaveAutomaton = () => {
-        saveAutomaton();
+        setDfaNameModalShow(true);
     }
 
     const [process, setProcess] = useState({
@@ -59,7 +66,7 @@ export const Main = () => {
     const onSubmitVocabularyRegex = async (event) => {
         event.preventDefault();
 
-        if (mode == "DFA") {
+        if (mode === "DFA") {
             if (vocabularyTemp !== "") {
                 let list = split(vocabularyTemp);
                 setVocabularyArray(list);
@@ -104,7 +111,7 @@ export const Main = () => {
                     setErrorsModalShow(true);
                     runAnimation(canvas.network, pathList);
                 }
-                else{
+                else {
                     setErrors([`Path not accepted: '${path}'`]);
                     setErrorsModalShow(true);
                 }
@@ -113,7 +120,7 @@ export const Main = () => {
                     isRunning: false
                 })
             }
-            else if (mode == "DFA") {
+            else if (mode === "DFA") {
                 setToastModal({ message: 'Please create or display an Automaton to run it!', show: true });
             }
             else {
@@ -122,6 +129,10 @@ export const Main = () => {
         }
         catch (error) {
             setToastModal({ message: 'An error ocurred while compiling the Regular Expression', show: true });
+            setProcess({
+                label: "Run",
+                isRunning: false
+            })
         }
     }
 
