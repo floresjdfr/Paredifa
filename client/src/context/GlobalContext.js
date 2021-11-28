@@ -23,6 +23,10 @@ const GlobalProvider = ({ ...props }) => {
     const [instructionsModalShow, setInstructionsModalShow] = useState(false);
     const [errorsModalShow, setErrorsModalShow] = useState(false);
 
+
+    const [vocabularyTemp, setVocabularyTemp] = useState('');
+    const [vocabularyArray, setVocabularyArray] = useState([]);
+
     const [canvas, setCanvas] = useState({ graph: {} });
 
     const [currentAutomaton, setCurrentAutomaton] = useState('');
@@ -175,6 +179,10 @@ const GlobalProvider = ({ ...props }) => {
         setPath,
         errors,
         setErrors,
+        vocabularyTemp,
+        setVocabularyTemp,
+        vocabularyArray,
+        setVocabularyArray
     }
 
     return <GlobalContext.Provider {...props} value={value} />;

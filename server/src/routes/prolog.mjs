@@ -1,9 +1,10 @@
 import express from 'express';
 
-import { runDFA } from '../controllers/prolog.mjs';
+import { compile, run } from '../controllers/prolog.mjs';
 
 const router = express.Router();
 
-router.post("/run", runAutomaton);
+router.post("/run", run);
+router.post("/compile", compile);
 
 export default router;

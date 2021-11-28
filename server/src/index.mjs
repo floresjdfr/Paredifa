@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import automatonRoutes from './routes/automatons.mjs'
 import aboutUsRoutes from './routes/aboutUs.mjs'
-import { run } from './controllers/prolog.mjs';
+import run from './routes/prolog.mjs';
 
 dotenv.config();
 

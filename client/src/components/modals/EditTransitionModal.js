@@ -1,9 +1,10 @@
 import { Modal, Button, Form } from "react-bootstrap";
 import useGlobalContext from "../../hooks/useGlobalContext";
 import { useState } from "react";
+import {allowTypeTransition} from '../../controllers/validations';
 
 export const EditTransitionModal = () => {
-    const { canvas, setCanvas, editTransitionModalShow, setEditTransitionModalShow, } = useGlobalContext();
+    const { canvas, setCanvas, editTransitionModalShow, setEditTransitionModalShow, vocabularyArray } = useGlobalContext();
 
     const [transitionLabelInput, SetTransitionLabelInput] = useState('');
 
@@ -27,7 +28,8 @@ export const EditTransitionModal = () => {
         setEditTransitionModalShow(false);
     }
     const handleInputChange = (event) => {
-        SetTransitionLabelInput(event.target.value);
+        console.log(event);
+        if (allowTypeTransition(vocabularyArray, event.nativeEvent.data, transitionLabelInput))SetTransitionLabelInput(event.target.value);
     }
 
     return (

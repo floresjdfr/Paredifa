@@ -1,4 +1,5 @@
 import * as api from '../api/index.js';
+import { isVocabularyRegex, missingTransitions } from './validations.js';
 
 /**
  * Generates a random color
@@ -29,57 +30,74 @@ export const getNewEdgeID = (network) => { return network.body.data.edges.length
  * Deletes selected object
  * @param {*} network Whole network object
  */
-export const deleteHandler = (network) => network.deleteSelected();
+export const deleteHandler = (network, vocabulary = [], setToastModal) => {
+    if (isVocabularyRegex(vocabulary, setToastModal))
+        network.deleteSelected();
+
+};
 
 /**
  * Activates 'adding node mode' in the canvas
  * @param {*} network Whole network object
  */
-export const newStateHandler = (network) => network.addNodeMode();
+export const newStateHandler = (network, vocabulary = [], setToastModal, setErrors) => {
+    if (isVocabularyRegex(vocabulary, setToastModal)){
+        network.addNodeMode();
+        let errors = missingTransitions(network, vocabulary);
+        if (errors.length > 0) setErrors(errors);
+
+    }
+}
 
 /**
  * Activates 'adding edge mode' in the canvas
  * @param {*} network Whole network object
  */
-export const newTransitionHandler = (network) => network.addEdgeMode();
+export const newTransitionHandler = (network, vocabulary = [], setToastModal) => {
+    if (isVocabularyRegex(vocabulary, setToastModal))
+        network.addEdgeMode()
+};
 
 /**
  * Sets or unsets the first selected node as 'Start Node'
  * @param {*} network 
  */
-export function setStartHandler(network) {
-    let selectedNodeId = network.getSelectedNodes().at(0);
+export function setStartHandler(network, vocabulary = [], setToastModal) {
+    if (isVocabularyRegex(vocabulary, setToastModal)) {
+        let selectedNodeId = network.getSelectedNodes().at(0);
 
-    if (selectedNodeId) {
-        let node = network.body.data.nodes.get(selectedNodeId);
+        if (selectedNodeId) {
+            let node = network.body.data.nodes.get(selectedNodeId);
 
-        if (node.start) removeStartState(network);
-        else {
-            removeStartState(network);
-            node.start = true;
+            if (node.start) removeStartState(network);
+            else {
+                removeStartState(network);
+                node.start = true;
+            }
+
+            node = updateColorForStartAndFinal([node]);
+            network.body.data.nodes.update(node);
         }
-
-        node = updateColorForStartAndFinal([node]);
-        network.body.data.nodes.update(node);
     }
 }
 /**
  * Sets or unsets the selected nodes as 'Start Node'
  * @param {*} network 
  */
-export function setFinalHandler(network) {
+export function setFinalHandler(network, vocabulary = [], setToastModal) {
+    if (isVocabularyRegex(vocabulary, setToastModal)) {
+        let selectedNodesIds = network.getSelectedNodes();
+        if (selectedNodesIds.length > 0) {
+            let nodes = selectedNodesIds.map(node => network.body.data.nodes.get(node));
+            if (nodes.length > 0) {
 
-    let selectedNodesIds = network.getSelectedNodes();
-    if (selectedNodesIds.length > 0) {
-        let nodes = selectedNodesIds.map(node => network.body.data.nodes.get(node));
-        if (nodes.length > 0) {
-
-            nodes = nodes.map(node => {
-                (node.final) ? node.final = false : node.final = true;
-                return node;
-            });
-            nodes = updateColorForStartAndFinal(nodes);
-            nodes.forEach(node => network.body.data.nodes.update(node));
+                nodes = nodes.map(node => {
+                    (node.final) ? node.final = false : node.final = true;
+                    return node;
+                });
+                nodes = updateColorForStartAndFinal(nodes);
+                nodes.forEach(node => network.body.data.nodes.update(node));
+            }
         }
     }
 }

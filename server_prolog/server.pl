@@ -8,15 +8,6 @@
 :- use_module(library(http/http_client)).
 :- use_module(library(http/json)).
 :- use_module(library(http/http_server)).
-
-
-:- use_module(library(http/thread_httpd)).
-:- use_module(library(http/http_dispatch)).
-:- use_module(library(http/thread_httpd)).
-:- use_module(library(http/http_files)).
-:- use_module(library(http/html_head)).
-
-
 :- [compiler].
 :- [utils].
 
@@ -32,14 +23,14 @@ mime:mime_extension('mjs', 'application/javascript').
       
 :- http_handler('/compile', compile, []).
 
-:- http_handler('/run', run, []). 
-:- http_handler('/hello_world', say_hi, []).  
+:- http_handler('/run', run, []).   
 
  
-server(Port) :-                                            % (2)
+server(Port) :-                                            
         http_server(http_dispatch, [port(Port)]).
        
-compile(Request) :-                                        % (3)
+compile(Request) :-     
+    reset_gensym,                                   
    http_read_json_dict(Request, DictIn),
    _{
        re : Re
@@ -48,34 +39,21 @@ compile(Request) :-                                        % (3)
    format(user_output,"re recibida: ~q~n",[ReAtom]),
    parseReFromAtom(ReAtom, T),
    evaluate(T,FA),
-   fa_to_json(FA,Json),
+   nfa_to_dfa(FA,DFA),
+   fa_to_json(DFA,Json),
    DictOut = DictIn.put(Json),
    reply_json_dict(DictOut)
 .
 
-
-say_hi(_Request) :-                                        % (3)
-    format('Content-type: text/plain~n~n'),
-    % Respuesta en formato JSON
-    server_time(STime),
-    random_between(1, 5, Sleep),
-    sleep(Sleep),
-    format(atom(Resp), '{"msg":"Hello World!","stime":"~a", "etime":"~a"}', [STime, Sleep]),
-    format(Resp)
-.
-
-
-
-run(Request) :- 
-                   
+run(Request) :-                
    http_read_json_dict(Request, DictIn),
    _{
        fa : FAJson,
        path : JsonPath
    } :< DictIn,
+   format(user_output,"fa recived: ~q~n",[FAJson]),
+   format(user_output,"path recived is: ~q~n",[JsonPath]),
     json_to_fa(FAJson,FA),
-    format(user_output,"fa recived: ~q~n",[FAJson]),
-    format(user_output,"path recived is: ~q~n",[JsonPath]),
     string_to_termList(JsonPath,TermPath),
     evaluate_run(FA,TermPath,Result),
     fa_run_path(FA,TermPath,Path),

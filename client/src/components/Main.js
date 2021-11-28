@@ -4,25 +4,11 @@ import { Canvas } from "./Canvas";
 import useGlobalContext from '../hooks/useGlobalContext';
 
 import './Main.css';
-import { deleteHandler, newStateHandler, newTransitionHandler, setFinalHandler, setStartHandler, runAnimation, requestRun } from '../controllers/canvas';
+import { deleteHandler, newStateHandler, newTransitionHandler, setFinalHandler, setStartHandler, runAnimation, requestRun, updateColorForStartAndFinal } from '../controllers/canvas';
 import { ToastModal } from './modals/ToastModal';
+import { compileRegex, split } from '../controllers/main';
+import { allowTypeVocabulary } from '../controllers/validations';
 
-/**
- * Changes the node's color if they are start or final node
- * @param {*} nodes => Array
- * @param {*} startColor => String
- * @param {*} finalColor => String
- * @returns new Array with colors added
- */
-/* const updateColorForStartAndFinal = (nodes, startColor = '#69995D', finalColor = '#9B2915') => {
-    return nodes.map(node => {
-        return node.start
-            ? { color: startColor, ...node }
-            : node.final
-                ? { color: finalColor, ...node }
-                : { ...node };
-    })
-} */
 
 export const Main = () => {
     const {
@@ -36,6 +22,11 @@ export const Main = () => {
         path,
         setPath,
         setToastModal,
+        vocabularyTemp,
+        setVocabularyTemp,
+        vocabularyArray,
+        setVocabularyArray,
+        errors, setErrors
     } = useGlobalContext();
 
     const onChangePath = e => setPath(e.target.value);
@@ -61,6 +52,34 @@ export const Main = () => {
         isRunning: false
     });
 
+    const onChangeVocabularyRegex = (event) => {
+        setVocabularyTemp(event.target.value);
+    }
+
+    const onSubmitVocabularyRegex = async (event) => {
+        event.preventDefault();
+
+        if (mode == "DFA") {
+            let list = split(vocabularyTemp);
+            setVocabularyArray(list);
+            console.log("Vocabulary set: ", list);
+        }
+        else {
+            try {
+                let {data} = await compileRegex(vocabularyTemp);
+                canvas.network.body.data.nodes.add(data.nodes);
+                canvas.network.body.data.edges.add(data.edges);
+                let newNodes = updateColorForStartAndFinal(canvas.network.body.data.nodes)
+                canvas.network.body.data.nodes.update(newNodes);
+            }
+            catch(error){
+                setToastModal({ message: 'An error ocurred while compiling the Regular Expression', show: true });
+            }
+            
+        }
+
+    }
+
     const handleRun = async () => {
         let nodes = canvas.network.body.data.nodes.get();
         let edges = canvas.network.body.data.edges.get();
@@ -81,6 +100,7 @@ export const Main = () => {
                 label: "Run",
                 isRunning: false
             })
+
         } else {
             setToastModal({ message: 'Please create or display an Automaton to run it!', show: true });
         }
@@ -97,23 +117,26 @@ export const Main = () => {
 
             <div className="d-flex flex-row flex-wrap">
                 <div className="me-auto">
-                    <Form.Group as={Row} className="mb-3" controlId=" ">
-                        <Col md="auto">
-                            <Form.Control type="text" placeholder={mode === 'DFA' ? 'Vocabulary' : 'Regex'} className="mt-2" />
-                        </Col>
-                        <Col md="auto">
-                            <Button
-                                variant="dark"
-                                className="buttons dark-button"
-                                onClick={() => console.log('Set Vocabulary')}
-                            >
-                                <i className="material-icons">sort_by_alpha</i> Set
-                                {
-                                    mode === 'DFA' ? ' Vocabulary' : ' Regex'
-                                }
-                            </Button>
-                        </Col>
-                    </Form.Group>
+                    <Form onSubmit={onSubmitVocabularyRegex}>
+                        <Form.Group as={Row} className="mb-3" controlId=" ">
+                            <Col md="auto">
+                                <Form.Control type="text" onChange={onChangeVocabularyRegex} placeholder={mode === 'DFA' ? 'Vocabulary' : 'Regex'} className="mt-2" />
+                            </Col>
+                            <Col md="auto">
+                                <Button
+                                    variant="dark"
+                                    className="buttons dark-button"
+                                    type="submit"
+
+                                >
+                                    <i className="material-icons">sort_by_alpha</i> Set
+                                    {
+                                        mode === 'DFA' ? ' Vocabulary' : ' Regex'
+                                    }
+                                </Button>
+                            </Col>
+                        </Form.Group>
+                    </Form>
                 </div>
 
                 <div>
@@ -158,15 +181,15 @@ export const Main = () => {
                 {
                     mode === 'DFA' &&
                     <div >
-                        <Button variant="outline-light" className="buttons" onClick={() => newStateHandler(canvas.network)}><i className="material-icons">radio_button_unchecked</i>New State</Button>
+                        <Button variant="outline-light" className="buttons" onClick={() => newStateHandler(canvas.network, vocabularyArray, setToastModal, setErrors)}><i className="material-icons">radio_button_unchecked</i>New State</Button>
 
-                        <Button variant="outline-light" className="buttons" onClick={() => newTransitionHandler(canvas.network)}><i className="material-icons">redo</i>New Transition</Button>
+                        <Button variant="outline-light" className="buttons" onClick={() => newTransitionHandler(canvas.network, vocabularyArray, setToastModal)}><i className="material-icons">redo</i>New Transition</Button>
 
-                        <Button variant="outline-light" className="buttons" onClick={() => deleteHandler(canvas.network)}><i className="material-icons">delete</i> Delete</Button>
+                        <Button variant="outline-light" className="buttons" onClick={() => deleteHandler(canvas.network, vocabularyArray, setToastModal)}><i className="material-icons">delete</i> Delete</Button>
 
-                        <Button variant="outline-light" className="buttons" onClick={() => setStartHandler(canvas.network)}><i className="material-icons">start</i> Set Start</Button>
+                        <Button variant="outline-light" className="buttons" onClick={() => setStartHandler(canvas.network, vocabularyArray, setToastModal)}><i className="material-icons">start</i> Set Start</Button>
 
-                        <Button variant="outline-light" className="buttons" onClick={() => setFinalHandler(canvas.network)}><i className="material-icons">radio_button_checked</i> Set Final</Button>
+                        <Button variant="outline-light" className="buttons" onClick={() => setFinalHandler(canvas.network, vocabularyArray, setToastModal)}><i className="material-icons">radio_button_checked</i> Set Final</Button>
                     </div>
                 }
                 <div className="me-auto">

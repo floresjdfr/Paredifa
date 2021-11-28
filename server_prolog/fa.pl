@@ -1,5 +1,5 @@
 :- [opers].
-
+:- [utils].
 
 :-dynamic dyn_fa_initial/2.
 :-dynamic dyn_fa_final/2.
@@ -30,6 +30,12 @@ fa_set_final(FA, Sf) :-
 fa_set_final(FA, Sf) :-
     assert( dyn_fa_final(FA, Sf) )
 .
+
+fa_retract_final(FA, Sf) :-
+    retract( dyn_fa_final(FA, Sf) )
+.
+
+
 fa_isFinal(FA, S) :- fa_finals(FA, Finals), member(S,Finals) .
 
 %SPEC Devuelve en L la lista de los estados finales del fa.
@@ -41,13 +47,17 @@ fa_non_initial_finals(FA, L) :- findall(F, dyn_fa_final(FA, F), L1),
                                 delete(L1, S0, L)
 . 
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MOVES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %SPEC setea un move X/S ==> Y a FA
 fa_set_move(FA, X/S ==> Y) :- 
     fa_insert_move_once(FA, X, S, Y)
 .
-
+fa_retract_move(FA,X/S ==> Y) :-
+    retract( dyn_fa_move(FA, X, S, Y) )
+.
 %SPEC valida si hay un move en FA tal X/S==>Y igual e inserte si no es asi
 fa_insert_move_once(FA,X,S,Y) :-
     dyn_fa_move(FA, X, S, Y), !
@@ -78,6 +88,11 @@ fa_non_initial_moves(FA,L) :- findall(X/S ==> Y, dyn_fa_move(FA, X, S, Y), L1),
                               fa_initial(FA,S0), delete(L1, S0/S==>Y, L2), delete(L2,X/S==>S0,L)
 .
 
+fa_find_moves_from_state(FA, S1, L) :-findall(S1/S ==> Y, dyn_fa_move(FA, S1, S, Y), L).
+
+fa_find_moves_to_state(FA, S1, L) :-findall(X/S ==> S1, dyn_fa_move(FA, X, S, S1), L).
+
+fa_find_moves_from_state_symbol(FA, S1, Symbol,L) :- findall(S1/Symbol ==> Y, dyn_fa_move(FA, S1, Symbol, Y), L).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% STATES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %SPEC valida si S ya esta como estado  en FA y si no lo esta se lo setea
@@ -86,6 +101,9 @@ fa_set_state(FA, S) :-
 .
 fa_set_state(FA, S) :-
     assert( dyn_fa_state(FA, S) )
+.
+fa_retract_state(FA, S) :-
+    retract( dyn_fa_state(FA, S) )
 .
 
 %SPEC Devuelve en L la lista de los estados del fa.
@@ -143,25 +161,23 @@ json_to_fa( JsonDict, FA ) :-
     forall(member(F, Finals), (term_string(FT,F),fa_set_final(FA, FT))),
     forall(member(S, States), (term_string(ST,S),fa_set_state(FA, ST))),
     forall(member(V, Vocabulary), (term_string(VT,V), fa_set_symbol(FA, VT))),
-    forall(member(M, Moves),(term_string(MT,M),fa_set_move(FA,MT)))
-    
+    forall(member(M, Moves),(term_string(MT,M),fa_set_move(FA,MT)))  
 .
 
 %SPEC Devuelve en Json el FA en formato JSON
-fa_to_json(FA, Json) :- 
-    fa_vocabulary(FA, V),
-    fa_states(FA, S),
-    fa_finals(FA, F),
-    fa_initial(FA, S0T),
-    fa_moves(FA, M),
-    string_to_termList(Vocabulary,V),
-    string_to_termList(States,S),
-    string_to_termList(Finals,F),
-    term_string(S0T,S0),
-    string_to_termList(Moves,M),
+fa_to_json( FA, Json ) :- 
+    fa_vocabulary( FA, V ),
+    fa_states( FA, S ),
+    fa_finals( FA, F ),
+    fa_initial( FA, S0T ),
+    fa_moves( FA, M ),
+    string_to_termList( States, S ),
+    string_to_termList( Finals, F ),
+    term_string( S0T, S0 ),
+    string_to_termList( Moves, M ),
     Json = fa{
         id: FA,
-        vocabulary: Vocabulary,
+        vocabulary: V,
         states: States,
         finals: Finals,
         initial: S0,
@@ -169,17 +185,18 @@ fa_to_json(FA, Json) :-
     }
 .
 
-fa_copy(FA, NFA) :- fa_new_id(NFA),
-                    fa_states(FA, States),
-                    forall(member(S, States), fa_set_state(NFA, S)),
-                    fa_initial(FA, S0),
-                    fa_set_initial(NFA, S0),
-                    fa_finals(FA, Finals),
-                    forall(member(F, Finals), fa_set_final(NFA, F)),                    
-                    fa_vocabulary(FA, Vocabulary),
-                    forall(member(V, Vocabulary), fa_set_symbol(NFA,V)),
-                    fa_moves(FA, Moves),
-                    forall(member(M, Moves), fa_set_move(NFA,M))
+%SPEC devuelve en NFA una copia de FA
+fa_copy(FA, NFA) :- fa_new_id( NFA ),
+                    fa_states( FA, States ),
+                    forall(member( S, States ), fa_set_state( NFA, S )),
+                    fa_initial( FA, S0 ),
+                    fa_set_initial( NFA, S0 ),
+                    fa_finals( FA, Finals ),
+                    forall(member( F, Finals ), fa_set_final( NFA, F )),                    
+                    fa_vocabulary( FA, Vocabulary ),
+                    forall(member( V, Vocabulary ), fa_set_symbol( NFA,V )),
+                    fa_moves( FA, Moves ),
+                    forall(member( M, Moves ), fa_set_move( NFA, M))
 .
 
 

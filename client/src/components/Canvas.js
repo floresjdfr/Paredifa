@@ -81,36 +81,7 @@ export const Canvas = () => {
         }
     };
 
-    //stata:{network:network}
-
-    /* const findErrors = () => {
-        let nodes = network.current.body.data.nodes.get();
-        let edges = network.current.body.data.edges.get();
-
-        if (nodes.length !== 0) {
-            let start = nodes.find((node) => node.start === true);
-            let final = nodes.find((node) => node.final === true);
-
-            if (!start) {
-                setErrors([...errors, 'There is no starting node'])
-
-            } else {
-                setErrors(errors.filter((error) => error !== 'There is no starting node'))
-            }
-
-            if (!final) {
-                setErrors([...errors, 'There is no final node'])
-            } else {
-                setErrors(errors.filter((error) => error !== 'There is no final node'))
-            }
-
-
-
-
-
-        }
-    } */
-
+    
     useEffect(() => {
         network.current = new Network(domNode.current, data, options);
         setCanvas({ network: network.current });
@@ -120,21 +91,7 @@ export const Canvas = () => {
 
     return (
         <div /* onClick={findErrors} */ className="canvas" id="canvas" ref={domNode}
-            onKeyPress={(e) => {
-                switch (e.code) {
-                    case 'KeyE':
-                        network.current.enableEditMode();
-                        break;
-                    case 'KeyA':
-                        network.current.addNodeMode();
-                        break;
-                    case 'KeyB':
-                        network.current.addEdgeMode();
-                        break;
-                    default:
-                        break;
-                }
-            }}
+            
         >
 
         </div>
