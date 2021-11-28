@@ -1,3 +1,11 @@
+/*
+  Grupo: 02
+        ID: 402330997 - Rolando Herrera Bustos - 10am
+        ID: 116830152 - Marvin Aguilar Fuentes - 10am
+        ID: 116880486 - Alonso Calderón Trigueros - 10am
+        ID: 402390142 - José David Flores Rodríguez - 10am
+*/
+
 import * as api from '../api/index.js';
 import { isVocabularyRegex, missingTransitions } from './validations.js';
 
@@ -198,5 +206,5 @@ export const requestRun = async (path, network) => {
 export const isCanvasEmpty = (network) => {
     let nodes = network.body.data.nodes.get();
     let edges = network.body.data.edges.get();
-    return nodes.length == 0 && edges.length == 0;
+    return nodes.length === 0 && edges.length === 0;
 }

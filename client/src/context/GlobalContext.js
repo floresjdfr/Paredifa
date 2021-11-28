@@ -1,3 +1,11 @@
+/*
+  Grupo: 02
+        ID: 402330997 - Rolando Herrera Bustos - 10am
+        ID: 116830152 - Marvin Aguilar Fuentes - 10am
+        ID: 116880486 - Alonso Calderón Trigueros - 10am
+        ID: 402390142 - José David Flores Rodríguez - 10am
+*/
+
 import React, { createContext, useState, useReducer } from 'react';
 import html2canvas from 'html2canvas';
 import { FETCH_ABOUTUS, CREATE, FETCH_AUTOMATONS, UPDATE, DELETE } from "../constants/actionTypes";
@@ -22,6 +30,7 @@ const GlobalProvider = ({ ...props }) => {
     const [aboutModalShow, setAboutModalShow] = useState(false);
     const [instructionsModalShow, setInstructionsModalShow] = useState(false);
     const [errorsModalShow, setErrorsModalShow] = useState(false);
+    const [dfaNameModalShow, setDfaNameModalShow] = useState(false);
 
 
     const [vocabularyTemp, setVocabularyTemp] = useState('');
@@ -60,7 +69,7 @@ const GlobalProvider = ({ ...props }) => {
         }
     }
 
-    const saveAutomaton = () => {
+    const saveAutomaton = (autName) => {
         if (isAuthenticated) {
             let { network } = canvas;
             let nodes = network.body.data.nodes.get();
@@ -76,7 +85,7 @@ const GlobalProvider = ({ ...props }) => {
                     userID: user?.email,
                     newAutomaton:
                     {
-                        automatonName: 'prueba acc',
+                        automatonName: autName,
                         nodes: nodes,
                         edges: edges
                     }
@@ -92,6 +101,7 @@ const GlobalProvider = ({ ...props }) => {
         } else {
             setToastModal({ message: 'Please login to save the Automaton!', show: true });
         }
+        setDfaNameModalShow(false);
     }
 
     const [state, dispatch] = useReducer(appReducer, initialState)
@@ -184,7 +194,9 @@ const GlobalProvider = ({ ...props }) => {
         vocabularyTemp,
         setVocabularyTemp,
         vocabularyArray,
-        setVocabularyArray
+        setVocabularyArray,
+        dfaNameModalShow,
+        setDfaNameModalShow,
     }
 
     return <GlobalContext.Provider {...props} value={value} />;
