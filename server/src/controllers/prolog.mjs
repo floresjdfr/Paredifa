@@ -15,10 +15,16 @@ import axios from 'axios';
 
 export const run = async (req, res) => {
     let auxJson = prepareRequest(req.body);
-
-    axios.post("http://localhost:9000/run", auxJson)
-        .then((response) => res.status(200).json(response.data))
-        .catch((error) => res.status(404).json({ message: error.message }))
+    console.log(auxJson);
+    await axios.post("http://backend-paredifa-prolog:9000/run", auxJson)
+        .then((response) => {
+            console.log(response.data);
+            res.status(200).json(response.data)
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(404).json({ message: error.message })
+    })
 }
 
 function prepareRequest({ path, dfa }) {

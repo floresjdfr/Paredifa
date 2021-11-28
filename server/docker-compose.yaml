@@ -8,3 +8,4 @@ services:
       - "3001:3001"
     environment:
       - MONGODB_URI=mongodb+srv://Paredifa:paredifaG2@cluster0.1d6sm.mongodb.net/Paredifa?retryWrites=true&w=majority
+    network_mode: "bridge"
