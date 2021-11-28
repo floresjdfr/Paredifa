@@ -8,7 +8,7 @@
 
 import axios from 'axios';
 
-const url = 'http://paredifa.centralus.cloudapp.azure.com:3001/api';
+const url = 'http://paredifa.westus2.cloudapp.azure.com:3001/api';
 
 export const readAboutUs = () => axios.get(`${url}/AboutUs`);
 export const readAutomatons = (userID) => axios.get(`${url}/automatons/${userID}`);

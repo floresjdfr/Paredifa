@@ -11,7 +11,7 @@ import axios from 'axios';
 export const run = async (req, res) => {
     let auxJson = prepareRequest(req.body);
     console.log(auxJson);
-    await axios.post("http://backend-paredifa-prolog:9000/run", auxJson)
+    await axios.post("http://paredifa.westus2.cloudapp.azure.com:9000/run", auxJson)
         .then((response) => {
             console.log(response.data);
             res.status(200).json(response.data)
@@ -23,7 +23,7 @@ export const run = async (req, res) => {
 }
 
 export const compile = async (req, res) => {
-    await axios.post("http://backend-paredifa-prolog:9000/compile", req.body)
+    await axios.post("http://paredifa.westus2.cloudapp.azure.com:9000/compile", req.body)
         .then((response) => {
             
             let data = parsePrologJson(response.data);
