@@ -11,3 +11,7 @@ Paredifa is a regular expressions compiler with the following features:
 * Express
 * MongoDB
 * Prolog to compile the regular expressions an convert them to an automaton
+
+# Demo
+
+![Image](https://github.com/floresjdfr/Paredifa/blob/main/Paredifa%20demo.gif)
