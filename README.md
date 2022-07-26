@@ -14,4 +14,4 @@ Paredifa is a regular expressions compiler with the following features:
 
 # Demo
 
-<img data-canonical-src="https://github.com/floresjdfr/Paredifa/blob/main/Paredifa%20demo.gif" width="200" height="400" />
+<img src="https://github.com/floresjdfr/Paredifa/blob/main/Paredifa%20demo.gif" width="200" height="400" />
