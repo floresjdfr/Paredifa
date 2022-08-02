@@ -11,10 +11,12 @@ Paredifa is a regular expressions compiler with the following features:
 ## Technologies used
 
 * [React](https://reactjs.org/)
+* [VisJS](https://visjs.github.io/vis-network/examples/)
 * [Express](https://expressjs.com/)
 * [Auth0](https://auth0.com/)
 * [MongoDB](https://www.mongodb.com/)
 * [Prolog](https://www.swi-prolog.org/)
+
 
 ## Servers
 
