@@ -10,11 +10,11 @@ Paredifa is a regular expressions compiler with the following features:
 
 ## Technologies used
 
-* <a src="https://reactjs.org/">React</a>
-* <a src="https://expressjs.com/">Express</a>
-* <a src="https://auth0.com/">Auth0</a>
-* <a src="https://www.mongodb.com/">MongoDB</a>
-* <a src="https://www.swi-prolog.org/">Prolog</a>
+* [React](https://reactjs.org/)
+* [Express](https://expressjs.com/)
+* [Auth0](https://auth0.com/)
+* [MongoDB](https://www.mongodb.com/)
+* [Prolog](https://www.swi-prolog.org/)
 
 ## Servers
 
@@ -29,7 +29,7 @@ This project was developed using 2 servers and one static page:
 * REACT_APP_AUTH0_DOMAIN
 * REACT_APP_AUTH0_CLIENT_ID
 
-The above environment variables are required to let <a src="https://auth0.com/">Auth0</a> authentication work. You can visit their website to get more information.
+The above environment variables are required to let [Auth0](https://auth0.com/) authentication work. You can visit their website to get more information.
 
 ### /server/.env : 
 * MONGODB_URI: Allows automatons to be persistent using MongoDB
@@ -43,15 +43,15 @@ The above environment variables are required to let <a src="https://auth0.com/">
 
 ## Prolog Server
 
-* In order to run the prolog server, you need to have <a src="https://www.swi-prolog.org/">prolog</a> installed in your device.
+* In order to run the prolog server, you need to have [Prolog](https://www.swi-prolog.org/) installed in your device.
 * Get to the server's root folder "/prolog_server/" and execute the following command:
 
 `swipl server.pl`
 
 ## Express Server
 
-* You need <a src="https://nodejs.org/en/">NodeJS</a> installed on your machine
-* You need to have MongoDB installed too or have a cloud account in <a src="https://www.mongodb.com/docs/atlas/?_ga=2.194023912.4718275.1659396922-1719441783.1658829494&_gac=1.254660858.1659401764.Cj0KCQjw852XBhC6ARIsAJsFPN1nXwfKuV97cvxpZrhCd3tJ5lxWDOWbe3jI1QcKIWt6qX_WEObuDkMaAoq7EALw_wcB">Atlas</a>
+* You need [NodeJS](https://nodejs.org/en/) installed on your machine
+* You need to have MongoDB installed too or have a cloud account in [Atlas](https://www.mongodb.com/docs/atlas/?_ga=2.194023912.4718275.1659396922-1719441783.1658829494&_gac=1.254660858.1659401764.Cj0KCQjw852XBhC6ARIsAJsFPN1nXwfKuV97cvxpZrhCd3tJ5lxWDOWbe3jI1QcKIWt6qX_WEObuDkMaAoq7EALw_wcB)
 * Get into the server's root folder "/server/"
 * Set up the environment variables
 * Run the command:
